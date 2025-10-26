@@ -15,7 +15,7 @@ def try_login(usename, pw):
         if senha_cadastrada == pw:
             st.session_state["authenticated"] = True
             st.session_state["username"] = username
-            st.experimental_user()
+            st.rerun()
     else:
         st.error("Usuário ou senha incorretos.")
 
