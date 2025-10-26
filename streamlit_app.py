@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 # ----- Estado inicial (garante chaves) -----
 if "authenticated" not in st.session_state:
@@ -32,5 +33,7 @@ if not st.session_state["authenticated"]:
 else:
     st.title("Sistema CBA | Provalia")
     st.success(f"Bem-vindo(a), {st.session_state["nome"]}!")
-    extrato = st.file_uploader("Selecione o arquivo do extrato extraído do SICOOB", type="xlsx")
-    
+    st.markdown("### Selecione o arquivo do Extrato Bancário")
+    extrato = st.file_uploader("Extrato extraído do banco SICOOB no formtao Excel", type="xlsx")
+    df_extrato = pd.DataFrame(extrato)
+    st.write(df_extrato)
