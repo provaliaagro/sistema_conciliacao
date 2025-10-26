@@ -34,7 +34,7 @@ else:
     st.title("Sistema CBA | Provalia")
     st.success(f"Bem-vindo(a), {st.session_state["nome"]}!")
     st.markdown("### Selecione o arquivo do Extrato Bancário")
-    extrato = st.file_uploader("Extrato extraído do banco SICOOB no formtao Excel", type="xlsx")
-    df_extrato = pd.read_excel(extrato)
+    extrato = st.file_uploader("Extrato extraído do banco SICOOB no formato Excel", type="xlsx")
+    df_extrato = pd.read_excel(extrato, engine="openpyxl")
     st.dataframe(df_extrato)
     
