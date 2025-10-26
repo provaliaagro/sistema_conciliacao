@@ -4,7 +4,7 @@ import streamlit as st
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 if "username" not in st.session_state:
-    st.session_state["username"] = ""
+    st.session_state["nome"] = ""
 
 # ----- Função de autenticação (substitua validação real) -----
 def try_login(usename, pw):
@@ -14,21 +14,23 @@ def try_login(usename, pw):
         nome_completo, email, senha_cadastrada = users[username]
         if senha_cadastrada == pw:
             st.session_state["authenticated"] = True
-            st.session_state["username"] = username
+            st.session_state["nome"] = nome_completo
             st.rerun()
     else:
         st.error("Usuário ou senha incorretos.")
 
 # ----- Fluxo: se não autenticado, mostra o formulário de login -----
 if not st.session_state["authenticated"]:
-    st.header("🔐 Login")
-    username = st.text_input("Nome de usuário", key="login_user")        # key evita reuso
-    senha = st.text_input("Senha", type="password", key="login_pw")
+    st.title("Sistema CBA | Provalia")
+    st.subheader("🔐 Login")
+    username = st.text_input("Nome de usuário", key="login_username")
+    senha = st.text_input("Senha", type="password", key="login_senha")
     if st.button("Entrar"):
         try_login(username, senha)
 
 # ----- Fluxo protegido: mostra a área da conciliação (após login) -----
 else:
-    st.success(f"Bem-vindo(a), {st.session_state['username']} — sessão autenticada.")
-    # A partir daqui, renderize o resto da aplicação (upload, processamento, relatório)
-    st.write("Área da conciliação — aqui vai o resto do app.")
+    st.title("Sistema CBA | Provalia")
+    st.success(f"Bem-vindo(a), {st.session_state['nome']}!")
+    extrato = st.file_uploader("Selecione o arquivo do extrato extraído do SICOOB", type="xlsx")
+    
