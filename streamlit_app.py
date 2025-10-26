@@ -31,6 +31,6 @@ if not st.session_state["authenticated"]:
 # ----- Fluxo protegido: mostra a área da conciliação (após login) -----
 else:
     st.title("Sistema CBA | Provalia")
-    st.success(f"Bem-vindo(a), {st.session_state['nome']}!")
+    st.success(f"Bem-vindo(a), {st.session_state["nome"]}!")
     extrato = st.file_uploader("Selecione o arquivo do extrato extraído do SICOOB", type="xlsx")
     
