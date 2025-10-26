@@ -7,7 +7,7 @@ if "username" not in st.session_state:
     st.session_state["nome"] = ""
 
 # ----- Função de autenticação (substitua validação real) -----
-def try_login(usename, pw):
+def try_login(username, pw):
     # Exemplo simples: checar contra st.secrets["users"]   
     users = st.secrets["users"]
     if username in users:
