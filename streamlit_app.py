@@ -7,13 +7,15 @@ if "username" not in st.session_state:
     st.session_state["username"] = ""
 
 # ----- Função de autenticação (substitua validação real) -----
-def try_login(user, pw):
-    # Exemplo simples: checar contra st.secrets["users"]
-    users = st.secrets.get("users", {})
-    if user in users and pw == users[user][1]:  # se você usou lista [email, senha]
-        st.session_state["authenticated"] = True      # marca logado
-        st.session_state["username"] = user          # guarda usuário
-        st.experimental_rerun()                      # reinicia render (limpa inputs)
+def try_login(usename, pw):
+    # Exemplo simples: checar contra st.secrets["users"]   
+    users = st.secrets["users"]
+    if username in users:
+        nome_completo, email, senha_cadastrada = users[username]
+        if senha_cadastrada == pw:
+            st.session_state["authenticated"] = True
+            st.session_state["username"] = username
+            st.experimental_rerun()
     else:
         st.error("Usuário ou senha incorretos.")
 
