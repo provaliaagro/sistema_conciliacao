@@ -20,18 +20,13 @@ def try_login(user, pw):
 # ----- Fluxo: se não autenticado, mostra o formulário de login -----
 if not st.session_state["authenticated"]:
     st.header("🔐 Login")
-    user = st.text_input("Nome de usuário", key="login_user")        # key evita reuso
-    pw = st.text_input("Senha", type="password", key="login_pw")
+    username = st.text_input("Nome de usuário", key="login_user")        # key evita reuso
+    senha = st.text_input("Senha", type="password", key="login_pw")
     if st.button("Entrar"):
-        try_login(user, pw)
+        try_login(username, senha)
 
 # ----- Fluxo protegido: mostra a área da conciliação (após login) -----
 else:
     st.success(f"Bem-vindo(a), {st.session_state['username']} — sessão autenticada.")
     # A partir daqui, renderize o resto da aplicação (upload, processamento, relatório)
     st.write("Área da conciliação — aqui vai o resto do app.")
-    if st.button("Logout"):
-        # limpa estado e rerun para voltar ao login "limpo"
-        st.session_state["authenticated"] = False
-        st.session_state["username"] = ""
-        st.experimental_rerun()
