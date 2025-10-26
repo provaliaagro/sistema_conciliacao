@@ -1,32 +1,37 @@
- # Primeiro commit 🚀
-
 import streamlit as st
 
-# Configuração do site
-st.set_page_config(page_title="Sistema de Conciliação", page_icon="🚀")
+# ----- Estado inicial (garante chaves) -----
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
+if "username" not in st.session_state:
+    st.session_state["username"] = ""
 
-st.title("Sistema de Conciliação | Provalia")
-# nome = st.text_input("Digite seu nome: ")
-# st.write(f"seu nome é {nome}")
-# aceita = st.checkbox("Aceita os termos?")
-# st.write(aceita)
-
-# st.sidebar.title("Teste")
-st.title("Login")
-username = st.text_input("Nome de Usuário", type="default")
-senha = st.text_input("Senha", type="password")
-
-if st.button("Entrar"):
-    users = st.secrets["users"]
-    # Verifica se o nome está cadastrado
-    if username in users:
-        nome_completo, email_cadastrado, senha_cadastrada = users[username]
-        # Compara credenciais
-        if senha == senha_cadastrada:
-            st.success(f"Bem-vindo(a), {nome_completo}!")
-            st.write(f"Email do responsável pela conciliação: **{email_cadastrado}**")
-            # Aqui entra o restante da lógica da conciliação...
-        else:
-            st.error("E-mail ou senha incorretos.")
+# ----- Função de autenticação (substitua validação real) -----
+def try_login(user, pw):
+    # Exemplo simples: checar contra st.secrets["users"]
+    users = st.secrets.get("users", {})
+    if user in users and pw == users[user][1]:  # se você usou lista [email, senha]
+        st.session_state["authenticated"] = True      # marca logado
+        st.session_state["username"] = user          # guarda usuário
+        st.experimental_rerun()                      # reinicia render (limpa inputs)
     else:
-        st.error("Usuário não encontrado.")
+        st.error("Usuário ou senha incorretos.")
+
+# ----- Fluxo: se não autenticado, mostra o formulário de login -----
+if not st.session_state["authenticated"]:
+    st.header("🔐 Login")
+    user = st.text_input("Nome de usuário", key="login_user")        # key evita reuso
+    pw = st.text_input("Senha", type="password", key="login_pw")
+    if st.button("Entrar"):
+        try_login(user, pw)
+
+# ----- Fluxo protegido: mostra a área da conciliação (após login) -----
+else:
+    st.success(f"Bem-vindo(a), {st.session_state['username']} — sessão autenticada.")
+    # A partir daqui, renderize o resto da aplicação (upload, processamento, relatório)
+    st.write("Área da conciliação — aqui vai o resto do app.")
+    if st.button("Logout"):
+        # limpa estado e rerun para voltar ao login "limpo"
+        st.session_state["authenticated"] = False
+        st.session_state["username"] = ""
+        st.experimental_rerun()
