@@ -37,7 +37,6 @@ else:
     extrato = st.file_uploader("Extrato extraído do banco SICOOB no formato Excel", type="xlsx")
     if extrato != None:
         df_extrato = pd.read_excel(extrato, engine="openpyxl")
-        df_extrato = df_extrato()
         df_extrato = df_extrato.iloc[1:]
         st.dataframe(df_extrato)
     
