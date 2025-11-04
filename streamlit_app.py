@@ -49,17 +49,12 @@ else:
 
             # Mostra o dataframe tratado na tela
             st.write("### Dados do Extrato:")
+            st.write("DataFrame Original")
             st.dataframe(df_extrato)
             if "valor" in df_extrato.columns:
-                st.write("DataFrame com linhas vazias removidas")
                 df_extrato = func.remover_linhas_vazias(df_extrato)
-                st.dataframe(df_extrato)
-                st.write("DataFrame com linhas desnecessárias removidas")
                 df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                st.dataframe(df_extrato)
-                st.write("DataFrame com saldos do dia removidos")
                 df_extrato = func.filtrar_saldos_duplicados(df_extrato)
-                st.dataframe(df_extrato)
                 df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor)
                     
                 # Verifica se há valores que não puderam ser convertidos
