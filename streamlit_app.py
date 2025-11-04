@@ -5,7 +5,7 @@ import funcoes_especificas as func
 # ----- Estado inicial (garante chaves) -----
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
-if "username" not in st.session_state:
+if "nome" not in st.session_state:
     st.session_state["nome"] = ""
 
 # ----- Função de autenticação (substitua validação real) -----
