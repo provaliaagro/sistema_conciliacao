@@ -4,7 +4,9 @@ import funcoes_especificas as func
 
 st.title("Sistema CBA | Provalia")
 st.markdown("### Selecione o arquivo do Extrato Bancário")
-extrato = st.file_uploader("Extrato extraído do banco SICOOB no formato Excel", type="xlsx")
+col1, col2 = st.columns(2)
+with col1: 
+    extrato = st.file_uploader("Extrato extraído do banco SICOOB no formato Excel", type="xlsx")
 # Apenas quando o arquivo de upload do extrato não está vazio
 if extrato is not None:
     try:
@@ -14,7 +16,6 @@ if extrato is not None:
         df_extrato = df_extrato.iloc[:, 0:3]
         df_extrato.columns = indices
         
-              
         st.session_state['df_extrato'] = df_extrato
 
         # Mostra o dataframe tratado na tela
@@ -48,4 +49,6 @@ if extrato is not None:
                 
     except Exception as e:
         st.error(f"Erro ao processar arquivo: {e}")
-    
+
+with col2:
+    controle_financeiro = st.file_uploader("Controle Financeiro extraído do sistema Perfarm no formato Excel", type="xlsx")
