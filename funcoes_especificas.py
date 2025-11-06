@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 
-# funcoes_especificas.py
-
 def converter_valor(valor_str):
     """
     Converte valores no formato brasileiro com C/D para float
@@ -49,7 +47,7 @@ def converter_valor(valor_str):
     except:
         return None
     
-def remover_linhas_vazias(df, colunas_verificar=['histórico', 'valor']):
+def remover_linhas_vazias(df, colunas_verificar=['descricao', 'valor']):
     """
     Remove linhas com valores vazios/None nas colunas especificadas
     
@@ -74,13 +72,12 @@ def remover_linhas_vazias(df, colunas_verificar=['histórico', 'valor']):
             df_limpo = df_limpo[mask]
     
     linhas_removidas = len(df) - len(df_limpo)
-    st.write(f"Linhas vazias removidas: {linhas_removidas}")
     
     return df_limpo
 
     
 
-def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_historico='histórico'):
+def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_descricao='descricao'):
     """
     Remove linhas baseadas em palavras ou partes de palavras no histórico
     
@@ -100,32 +97,28 @@ def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_historico='h
         ]
     
     # Converte tudo para maiúsculo para busca case-insensitive
-    historico_upper = df[coluna_historico].astype(str).str.upper()
+    descricao_upper = df[coluna_descricao].astype(str).str.upper()
     
     # Cria máscara inicial como False
-    mask_remover = historico_upper.isin([])  # Inicia vazia
+    mask_remover = descricao_upper.isin([])  # Inicia vazia
     
     # Para cada palavra na lista, busca se aparece em qualquer parte do histórico
     for palavra in palavras_remover:
-        mask_remover = mask_remover | historico_upper.str.contains(palavra, na=False)
+        mask_remover = mask_remover | descricao_upper.str.contains(palavra, na=False)
     
     # Inverte a máscara: mantém apenas as linhas que NÃO contêm as palavras
     mask_manter = ~mask_remover
     
     df_filtrado = df[mask_manter]
     
-    print(f"Filtro aplicado: {len(df) - len(df_filtrado)} linhas removidas")
-    
     return df_filtrado
 
-# funcoes_especificas.py
-
-def filtrar_saldos_duplicados(df, coluna_historico='histórico', coluna_data='data'):
+def filtrar_saldos_duplicados(df, coluna_descricao='descricao', coluna_data='data'):
     """
     Mantém apenas o último saldo do dia e remove os demais
     """
     # Identifica linhas que contém 'SALDO' no histórico
-    mask_saldos = df[coluna_historico].astype(str).str.upper().str.contains('SALDO DO DIA', na=False)
+    mask_saldos = df[coluna_descricao].astype(str).str.upper().str.contains('SALDO DO DIA', na=False)
     linhas_saldos = df[mask_saldos]
     linhas_nao_saldos = df[~mask_saldos]
     
@@ -142,6 +135,49 @@ def filtrar_saldos_duplicados(df, coluna_historico='histórico', coluna_data='da
     # Combina: não-saldos + último saldo
     df_filtrado = pd.concat([linhas_nao_saldos, ultimo_saldo]).sort_index()
     
-    print(f"Saldos tratados: {len(linhas_saldos)} saldos encontrados, {len(linhas_saldos) - 1} removidos")
-    
     return df_filtrado
+
+def converter_valor_reais(valor_str):
+    """
+    Converte strings do formato '-R$ 497,21' para float
+    Trata automaticamente o sinal negativo
+    """
+    try:
+        valor_str = str(valor_str).strip()
+        
+        # Verifica se tem sinal negativo
+        if valor_str.startswith('-'):
+            sinal = -1
+            valor_limpo = valor_str[1:]  # Remove o '-'
+        else:
+            sinal = 1
+            valor_limpo = valor_str
+        
+        # Remove 'R$' e espaços extras
+        valor_limpo = valor_limpo.replace('R$', '').strip()
+        
+        # Remove pontos (separadores de milhar)
+        valor_limpo = valor_limpo.replace('.', '')
+        
+        # Substitui vírgula por ponto (decimal)
+        valor_limpo = valor_limpo.replace(',', '.')
+        
+        # Converte para float e aplica sinal
+        return float(valor_limpo) * sinal
+        
+    except (ValueError, AttributeError, TypeError):
+        return None
+    
+def converter_coluna_data_brasileira(df, coluna_data='data'):
+    """
+    Converte coluna inteira de datas para formato brasileiro
+    """
+    df_temp = df.copy()
+    
+    # Converte para datetime
+    df_temp[coluna_data] = pd.to_datetime(df_temp[coluna_data], errors='coerce')
+    
+    # Formata para brasileiro
+    df_temp[coluna_data] = df_temp[coluna_data].dt.strftime('%d/%m/%Y')
+    
+    return df_temp
