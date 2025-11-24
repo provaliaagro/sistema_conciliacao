@@ -3,10 +3,10 @@ import pandas as pd
 import funcoes_especificas as func
 
 def conciliacao(ex, cf):
-    st.write("### Dataframe Extrato")
-    st.dataframe(ex)
-    st.write("### Dataframe Controle Financeiro")
-    st.dataframe(cf)
+    # st.write("### Dataframe Extrato")
+    # st.dataframe(ex)
+    #st.write("### Dataframe Controle Financeiro")
+    #st.dataframe(cf)
 
     # Extração dos saldos
     saldo_inicial, saldo_final, ex = func.extrair_saldos(ex)
