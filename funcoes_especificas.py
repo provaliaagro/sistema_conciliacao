@@ -75,8 +75,6 @@ def remover_linhas_vazias(df, colunas_verificar=['descricao', 'valor']):
     
     return df_limpo
 
-    
-
 def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_descricao='descricao'):
     """
     Remove linhas baseadas em palavras ou partes de palavras no histórico
@@ -84,7 +82,7 @@ def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_descricao='d
     Args:
         df: DataFrame com os dados
         palavras_remover: Lista de palavras para remover
-        coluna_historico: Nome da coluna indicada
+        coluna_descricao: Nome da coluna indicada
     
     Returns:
         DataFrame filtrado
@@ -181,3 +179,99 @@ def converter_coluna_data_brasileira(df, coluna_data='data'):
     df_temp[coluna_data] = df_temp[coluna_data].dt.strftime('%d/%m/%Y')
     
     return df_temp
+
+def extrair_saldos(df, coluna_descricao='descricao', coluna_valor='valor_convertido'):
+    """
+    Extrai saldo anterior e saldo do dia do dataframe
+    
+    Returns:
+        tuple: (saldo_anterior, saldo_dia)
+    """
+    palavras_filtro = ['SALDO ANTERIOR', 'SALDO DO DIA']
+    
+    # Converte para maiúsculo
+    descricao_upper = df[coluna_descricao].astype(str).str.upper()
+    
+    # Encontra linhas com os saldos
+    mask_saldos = descricao_upper.str.contains('|'.join(palavras_filtro), na=False)
+    df_saldos = df[mask_saldos].copy()
+    
+    saldo_anterior = None
+    saldo_dia = None
+    
+    # Dataframe SEM os saldos
+    df_sem_saldos = df[~mask_saldos].copy()
+    
+    # Extrai os valores
+    for idx, row in df_saldos.iterrows():
+        descricao = str(row[coluna_descricao]).upper()
+        valor = row[coluna_valor]
+        
+        if 'SALDO ANTERIOR' in descricao:
+            saldo_anterior = valor
+        elif 'SALDO DO DIA' in descricao:
+            saldo_dia = valor
+    
+    return saldo_anterior, saldo_dia, df_sem_saldos
+
+def contar_movimentacoes(df, coluna_descricao='descricao', coluna_valor='valor_convertido'):
+    """
+    Conta movimentações, entradas e saídas excluindo linhas com descrição igual a 'SALDO' e derivadas disso
+    
+    Returns:
+        tuple: (total_movimentacoes, total_entradas, total_saidas)
+    """
+    # Filtra linhas sem 'SALDO'
+    mask_sem_saldos = ~df[coluna_descricao].astype(str).str.upper().str.contains('SALDO', na=False)
+    df_movimentacoes = df[mask_sem_saldos]
+    
+    # Conta totais
+    total_movimentacoes = len(df_movimentacoes)
+    
+    # Conta entradas (valores positivos) e saídas (valores negativos)
+    if coluna_valor in df_movimentacoes.columns:
+        entradas = len(df_movimentacoes[df_movimentacoes[coluna_valor] > 0])
+        saidas = len(df_movimentacoes[df_movimentacoes[coluna_valor] < 0])
+    else:
+        entradas = saidas = 0
+    
+    return total_movimentacoes, entradas, saidas
+
+def conciliacao_simples(df_extrato, df_controle):
+    """
+    Compara os valores e datas dos dois dataframes e retorna um dataframe conciliado
+    
+    Args:
+        df_extrato: DataFrame do extrato bancário
+        df_controle: DataFrame do controle financeiro
+    
+    Returns:
+        DataFrame com as colunas de conciliação
+    """
+    
+    # Prepara os dataframes
+    df_e = df_extrato[['data', 'descricao', 'valor_convertido',]].copy()
+    df_e.columns = ['data_extrato', 'descricao_extrato', 'valor_extrato']
+    
+    df_c = df_controle[['data','descricao', 'valor_convertido']].copy()
+    df_c.columns = ['data_controle', 'descricao_controle', 'valor_controle']
+    
+    # Faz o merge por valor E data (strings no formato brasileiro)
+    df_final = pd.merge(
+        df_e,
+        df_c,
+        left_on=['valor_extrato', 'data_extrato'],
+        right_on=['valor_controle', 'data_controle'],
+        how='outer'
+    )
+    
+    # Cria status
+    df_final['status_conciliacao'] = df_final.apply(
+        lambda x: "CONCILIADA" if (
+            pd.notna(x['descricao_extrato']) and 
+            pd.notna(x['descricao_controle'])
+        ) else "NÃO CONCILIADO",
+        axis=1
+    )
+    
+    return df_final
