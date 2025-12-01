@@ -1,11 +1,14 @@
 import streamlit as st
 import pandas as pd
+from datetime import datetime
+import io
 import funcoes_especificas as func
 import conciliacao as c
 
 # Inicializando as variáves de estado do extrato e do controle financeiro:
 st.session_state.df_extrato = None
 st.session_state.df_controle = None
+st.session_state.excel = None
 
    
 if st.session_state.df_extrato is None:
@@ -84,4 +87,16 @@ if st.session_state.df_extrato is None:
 
 if st.session_state.df_controle is not None:
     if st.button("Processar Conciliação"):
-        c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle)
+        excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle)
+        st.session_state.excel = excel_bytes
+        
+if st.session_state.excel is not None:
+    st.download_button(
+        label="📥 Baixar Relatório Excel",
+        data=excel_bytes,
+        file_name=f"relatorio_conciliação_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+            
+        
+        

@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import funcoes_especificas as func
+import relatorio as r
 
 def conciliacao(ex, cf):
     # st.write("### Dataframe Extrato")
@@ -25,6 +26,22 @@ def conciliacao(ex, cf):
     
     # Conciliação Simples
     resultado = func.conciliacao_simples(ex,cf)
-    st.dataframe(resultado)
+     
+    # CRIAÇÃO DO RELATÓRIO
+    nome_usuario = st.session_state.get('nome', 'Usuário não identificado')
+    
+    df_relatorio = r.criar_relatorio_conciliação(
+        resultado,
+        saldo_inicial,
+        saldo_final,
+        mov_extrato,
+        mov_controle,
+        nome_usuario
+    )
+    
+    excel_bytes = r.exportar_relatorio_excel(df_relatorio)
+    
+    return excel_bytes
+    
     
     
