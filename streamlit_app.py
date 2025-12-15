@@ -55,6 +55,8 @@ if st.session_state.df_extrato is None:
             df_extrato = df_extrato.iloc[:, 0:3]
             df_extrato.columns = indices_extrato
             
+            df_extrato = func.ordernar_arquivo(df_extrato)
+                        
             st.session_state['df_extrato'] = df_extrato
 
             # Mostra o dataframe tratado na tela
@@ -78,7 +80,7 @@ if st.session_state.df_extrato is None:
                 
                 # Salvando o extrato no session_state
                 st.session_state['df_extrato'] = df_extrato
-
+                
             else:
                 st.error("Coluna 'valor' não encontrada no arquivo!")
                 st.stop()
@@ -118,10 +120,15 @@ if st.session_state.df_extrato is None:
 
 if st.session_state.df_controle is not None:
     if st.button("Processar Conciliação"):
+        barra_progresso = st.progress(0)
+        barra_progresso.progress(20)
         excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle)
+        barra_progresso.progress(50)
         st.session_state.excel = excel_bytes
+        barra_progresso.progress(70)
         
 if st.session_state.excel is not None:
+    barra_progresso.progress(100)
     st.download_button(
         label="📥 Baixar Relatório Excel",
         data=excel_bytes,

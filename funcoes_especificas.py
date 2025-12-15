@@ -111,6 +111,32 @@ def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_descricao='d
     
     return df_filtrado
 
+def ordernar_arquivo(df):
+    
+    def formatacao_data(data):
+        try:
+            # Supondo formato DD/MM/YYYY
+            if '/' in str(data):
+                dia, mes, ano = str(data).split('/')
+                return f"{ano}{mes.zfill(2)}{dia.zfill(2)}"
+            # Se já estiver em outro formato, retorna original
+            return str(data)
+        except:
+            return "00000000"  # Para datas inválidas
+    
+    df['_ordenar'] = df['data'].apply(formatacao_data)
+    
+    # Ordenar
+    df = df.sort_values(by='_ordenar')
+    
+    # Remover coluna auxiliar
+    df = df.drop(columns=['_ordenar'])
+    
+    # Resetar índice
+    df = df.reset_index(drop=True)
+    
+    return df
+
 def filtrar_saldos_duplicados(df, coluna_descricao='descricao', coluna_data='data'):
     """
     Mantém apenas o último saldo do dia e remove os demais
@@ -275,3 +301,38 @@ def conciliacao_simples(df_extrato, df_controle):
     )
     
     return df_final
+
+def ordenar_por_data_br(lista_dados, campo_data='data'):
+        """Ordena lista de dicionários por data no formato brasileiro DD/MM/YYYY"""
+        def chave_ordenacao(item):
+            data_str = item.get(campo_data, '')
+            if not data_str:
+                return (1, '')  # Datas vazias vão para o final
+            
+            try:
+                # Converte DD/MM/YYYY para tuple (ano, mes, dia) para ordenação
+                partes = data_str.split('/')
+                if len(partes) == 3:
+                    dia, mes, ano = partes
+                    # Extrai valor numérico para desempate
+                    valor = 0
+                    if 'valor' in item:
+                        valor_str = str(item['valor'])
+                        # Se o valor já for numérico
+                        if isinstance(item['valor'], (int, float)):
+                            valor = float(item['valor'])
+                        else:
+                            # Tenta extrair de string formatada "R$ 1.234,56"
+                            try:
+                                valor_limpo = valor_str.replace('R$', '').replace('.', '').replace(',', '.').strip()
+                                valor = float(valor_limpo)
+                            except:
+                                valor = 0
+                    
+                    return (0, ano, mes, dia, valor)
+            except:
+                pass
+            
+            return (1, 9999, 13, 32, float('inf')) # Para datas inválidas
+        
+        return sorted(lista_dados, key=chave_ordenacao)

@@ -30,7 +30,7 @@ def conciliacao(ex, cf):
     # CRIAÇÃO DO RELATÓRIO
     nome_usuario = st.session_state.get('nome', 'Usuário não identificado')
     
-    df_relatorio = r.criar_relatorio_conciliação(
+    df_relatorico_conv, df_relatorio_div = r.criar_relatorio_conciliação(
         resultado,
         saldo_inicial,
         saldo_final,
@@ -39,7 +39,7 @@ def conciliacao(ex, cf):
         nome_usuario
     )
     
-    excel_bytes = r.exportar_relatorio_excel(df_relatorio)
+    excel_bytes = r.exportar_relatorio_excel( df_relatorico_conv, df_relatorio_div)
     
     return excel_bytes
     
