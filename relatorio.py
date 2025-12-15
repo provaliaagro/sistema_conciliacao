@@ -114,9 +114,8 @@ def criar_relatorio_conciliação(
             if linha['valor'] != "vazio":
                 controle_divergente.append(linha)
             
-            controle_divergente = func.ordenar_por_data_br(controle_divergente)
-            
-            for i in controle_divergente:
+        controle_divergente = func.ordenar_por_data_br(controle_divergente)
+        for i in controle_divergente:
                 relatorio_div.append([i['data'], i['descricao'], i['valor']])
             
     else:
