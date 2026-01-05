@@ -51,8 +51,8 @@ if st.session_state.df_extrato is None:
         try:
             indices_extrato = ["data", "descricao", "valor"]
             df_extrato = pd.read_excel(extrato, engine="openpyxl")
-            df_extrato = df_extrato.iloc[3:]
-            df_extrato = df_extrato.iloc[:, 0:3]
+            df_extrato = df_extrato.iloc[2:]
+            df_extrato = df_extrato.iloc[:, [0,2,3]]
             df_extrato.columns = indices_extrato
             
             df_extrato = func.ordernar_arquivo(df_extrato)
@@ -66,14 +66,13 @@ if st.session_state.df_extrato is None:
                 df_extrato = func.remover_linhas_desnecessarias(df_extrato)
                 df_extrato = func.filtrar_saldos_duplicados(df_extrato)
                 df_extrato = func.converter_coluna_data_brasileira(df_extrato)
-                df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor)
-                    
+                df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)
+                
                 # Verifica se há valores que não puderam ser convertidos
                 valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
                 if not valores_invalidos.empty:
                     st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
                     st.dataframe(valores_invalidos[['valor']])
-                st.session_state['df_extrato'] = df_extrato
                 
                 # Mostra o dataframe na tela
                 # st.dataframe(df_extrato)
@@ -95,12 +94,12 @@ if st.session_state.df_extrato is None:
         if controle_financeiro is not None:
             try: 
                 indices_controle = ["data", "descricao", "valor"]
-                df_controle = pd.read_excel(controle_financeiro, engine="openpyxl")
+                df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
                 st.session_state['df_controle'] = df_controle
-                df_controle = df_controle.iloc[5:]
-                df_controle = df_controle.iloc[:,[2,4,8]]
+                df_controle = df_controle[["Data", "Contraparte", "Valor"]]
                 df_controle.columns = indices_controle
                 df_controle = func.remover_linhas_vazias(df_controle)
+                df_controle = func.remover_linhas_desnecessarias(df_controle)
                 df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
                 # Verifica se há valores que não puderam ser convertidos
                 valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]

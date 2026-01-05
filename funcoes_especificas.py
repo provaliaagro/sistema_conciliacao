@@ -46,6 +46,72 @@ def converter_valor(valor_str):
         
     except:
         return None
+
+def converter_valor_extrato(valor_str):
+    """
+    Converte valores no formato brasileiro com C/D para float
+    Agora trata casos com espaço e hífen:
+    "1.204,54 C" -> 1204.54
+    "- 850,00 D" -> -850.00
+    "63.173,85 C" -> 63173.85
+    """
+    try:
+        # Se for None ou vazio
+        if valor_str is None:
+            return None
+            
+        valor_str = str(valor_str).strip().upper()
+        
+        if valor_str == "" or valor_str == "NAN":
+            return None
+        
+        # Remove qualquer hífen no início (com ou sem espaço)
+        if valor_str.startswith('-'):
+            valor_str = valor_str[1:].strip()
+            # Se tinha hífen, já forçamos negativo, independente da letra
+            sinal_forcado = -1
+        else:
+            sinal_forcado = None
+        
+        # Remove espaços extras e identifica C/D
+        # Pode terminar com "C", " D", "C ", etc
+        valor_str = valor_str.strip()
+        
+        # Define sinal baseado na letra (se não tiver sinal_forcado)
+        if valor_str.endswith('C'):
+            sinal = 1
+            numero_limpo = valor_str[:-1].strip()  # Remove 'C' e espaços
+        elif valor_str.endswith('D'):
+            sinal = -1
+            numero_limpo = valor_str[:-1].strip()  # Remove 'D' e espaços
+        else:
+            sinal = 1
+            numero_limpo = valor_str.strip()
+        
+        # Sobrescreve sinal se tinha hífen no início
+        if sinal_forcado is not None:
+            sinal = sinal_forcado
+        
+        # Remove apenas os pontos que são separadores de milhar
+        if ',' in numero_limpo:
+            partes = numero_limpo.split(',')
+            parte_inteira = partes[0]
+            parte_decimal = partes[1]
+            
+            # Remove pontos apenas da parte inteira (milhar)
+            parte_inteira = parte_inteira.replace('.', '')
+            
+            # Junta com ponto como separador decimal
+            numero_limpo = parte_inteira + '.' + parte_decimal
+        else:
+            numero_limpo = numero_limpo.replace('.', '')
+        
+        # Converte para float e aplica sinal
+        return float(numero_limpo) * sinal
+        
+    except Exception as e:
+        print(f"Erro ao converter '{valor_str}': {e}")
+        return None
     
 def remover_linhas_vazias(df, colunas_verificar=['descricao', 'valor']):
     """
@@ -89,10 +155,7 @@ def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_descricao='d
     """
     if palavras_remover is None:
         palavras_remover = [
-            'SALDO BLOQ.ANTERIOR', 'SALDO BLOQ.C.CORRENTE:', 'VENCTO CHEQUE ESPECIAL:', 'TAXA CHEQUE ESPECIAL',
-            'CUSTO EFETIVO TOTAL', 'EXTRATOS EMITIDOS ATÉ', 'SAC', 'OUVIDORIA', 'LIMITE CHEQUE ESPECIAL',
-            'SALDO DISPONÍVEL', 'SALDO EM C.CORRENTE', 'JUROS CHQ ESPECIAL'
-        ]
+            'SALDO BLOQUEADO ANTERIOR', 'A Perfarm' ]
     
     # Converte tudo para maiúsculo para busca case-insensitive
     descricao_upper = df[coluna_descricao].astype(str).str.upper()

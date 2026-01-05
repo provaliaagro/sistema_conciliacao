@@ -31,8 +31,8 @@ def criar_relatorio_conciliação(
     
     # DADOS GERAIS DA CONCILIAÇÃO
     relatorio_dados.append(["DADOS GERAIS DA CONCILIAÇÃO"])
-    relatorio_dados.append(["Saldo Inicial da Conta:", f"R$ {saldo_inicial:,.2f}" if saldo_inicial else "Não identificado"])
-    relatorio_dados.append(["Saldo Final da Conta:", f"R$ {saldo_final:,.2f}" if saldo_final else "Não identificado"])
+    relatorio_dados.append(["Saldo Inicial da Conta:", f"R$ {saldo_inicial:,.2f}"])
+    relatorio_dados.append(["Saldo Final da Conta:", f"R$ {saldo_final:,.2f}"])
     relatorio_dados.append([])  # Linha em branco
     
     # RESUMO DE MOVIMENTAÇÕES
@@ -40,7 +40,6 @@ def criar_relatorio_conciliação(
     relatorio_dados.append(["", "EXTRATO", "CONTROLE FINANCEIRO"])
     relatorio_dados.append(["Total de Movimentações:", mov_extrato, mov_controle])
     relatorio_dados.append([])  # Linha em branco
-    relatorio_dados.append(["Quant. de movimentações ausentes no perfarm:", ])
     relatorio_dados.append([])  # Linha em branco
     
     # ESTATÍSTICAS DA CONCILIAÇÃO
@@ -68,7 +67,7 @@ def criar_relatorio_conciliação(
         
         # Cabeçalho das operações divergentes
         cabecalho = [
-            "Data", "Descrição", "Valor"
+            "Data", "Descrição", "Valor (R$)"
         ]
         relatorio_div.append(cabecalho)
         
@@ -83,7 +82,8 @@ def criar_relatorio_conciliação(
             linha = {
                 'data': data_extrato,
                 'descricao': row.get('descricao_extrato', ''),
-                'valor': f"R$ {row.get('valor_extrato', 0):,.2f}" if pd.notna(row.get('valor_extrato')) else "vazio"
+                'valor': row.get('valor_extrato', 0) if pd.notna(row.get('valor_extrato')) else "vazio"
+                #'valor': f"R$ {row.get('valor_extrato', 0):,.2f}" if pd.notna(row.get('valor_extrato')) else "vazio"
             }
             if linha['valor'] != "vazio":
                 extrato_divergente.append(linha)
@@ -109,7 +109,8 @@ def criar_relatorio_conciliação(
             linha = {
                 'data': data_controle,
                 'descricao': row.get('descricao_controle', ''),
-                'valor': f"R$ {row.get('valor_controle', 0):,.2f}" if pd.notna(row.get('valor_controle')) else "vazio"
+                'valor': row.get('valor_controle', 0) if pd.notna(row.get('valor_controle')) else "vazio"
+                #'valor': f"R$ {row.get('valor_controle', 0):,.2f}" if pd.notna(row.get('valor_controle')) else "vazio"
             }
             if linha['valor'] != "vazio":
                 controle_divergente.append(linha)
@@ -128,8 +129,8 @@ def criar_relatorio_conciliação(
         
         # Cabeçalho das operações divergentes
         cabecalho = [
-            "Data Extrato", "Descrição Extrato", "Valor Extrato", 
-            "Data Controle", "Descrição Controle", "Valor Controle"
+            "Data Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
+            "Data Controle", "Descrição Controle", "Valor Controle (R$)"
         ]
         relatorio_conv.append(cabecalho)
         
@@ -142,10 +143,12 @@ def criar_relatorio_conciliação(
             linha = [
                 data_extrato,
                 row.get('descricao_extrato', ''),
-                f"R$ {row.get('valor_extrato', 0):,.2f}" if pd.notna(row.get('valor_extrato')) else "",
+                row.get('valor_extrato', 0) if pd.notna(row.get('valor_extrato')) else "",
+                # f"R$ {row.get('valor_extrato', 0):,.2f}" if pd.notna(row.get('valor_extrato')) else "",
                 data_controle,
                 row.get('descricao_controle', ''),
-                f"R$ {row.get('valor_controle', 0):,.2f}" if pd.notna(row.get('valor_controle')) else ""
+                row.get('valor_controle', 0) if pd.notna(row.get('valor_controle')) else "",
+                #f"R$ {row.get('valor_controle', 0):,.2f}" if pd.notna(row.get('valor_controle')) else ""
             ]
             relatorio_conv.append(linha)
     else:
