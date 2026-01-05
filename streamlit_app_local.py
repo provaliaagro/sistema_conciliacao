@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-import io
 import funcoes_especificas as func
 import conciliacao as c
 
