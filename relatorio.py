@@ -2,9 +2,11 @@ import pandas as pd
 from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+from openpyxl.formatting.rule import CellIsRule
 from openpyxl.utils import get_column_letter
 import io
 import funcoes_especificas as func
+import streamlit as st
 
 def criar_relatorio_conciliação(
     df_conciliado,
@@ -195,6 +197,8 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
         fonte_titulo = Font(name='Calibri', size=14, bold=True, color='000000')
         fonte_cabecalho = Font(name='Calibri', size=11, bold=True, color='000000')
         fonte_normal = Font(name='Calibri', size=10)
+        fonte_negativo = Font(name='Calibri', size=10, color='FF0000')
+        fonte_positivo = Font(name='Calibri', size=10, color='0000FF')
         
         # 2. Cores
         cor_titulo = PatternFill(start_color='d0d0d0', end_color='366092', fill_type='solid')
@@ -213,19 +217,46 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
         # Aplica estilos em ambas as abas
         for sheet_name in ['Transações Conciliadas', 'Transações Não Conciliadas']:
             worksheet = workbook[sheet_name]
-        
-        # Itera por todas as células
+
+            # PRIMEIRO: Aplica cor de fundo para linhas pares
+            for i, row in enumerate(worksheet.iter_rows(min_row=1), start=1):
+                if i > 17 and i % 2 == 0:  # Começa após os cabeçalhos
+                    for cell in row:
+                        cell.fill = cor_linha_par
+            
+            # SEGUNDO: Itera por todas as células aplicando formatação
             for row in worksheet.iter_rows():
                 for cell in row:
-                    # Aplica fonte padrão
-                    cell.font = fonte_normal
+                    # Aplica borda para todas as células
                     cell.border = borda
                     
-                    # Aplica alinhamento baseado no tipo de conteúdo
-                    if isinstance(cell.value, (int, float)):
-                        cell.alignment = alinhamento_direita
-                    else:
-                        cell.alignment = alinhamento_esquerda
+                    # Para células NÃO numéricas ou NÃO em colunas de valores
+                    if not isinstance(cell.value, (int, float)):
+                        # Aplica fonte normal e alinhamento
+                        cell.font = fonte_normal
+                        if isinstance(cell.value, (int, float)):
+                            cell.alignment = alinhamento_direita
+                        else:
+                            cell.alignment = alinhamento_esquerda
+                    else :
+                        for i, row in enumerate(worksheet.iter_rows(min_row=17), start=17):
+                            if i > 17:
+                                for cell in row:
+                                    if isinstance(cell.value, (int, float)):
+                                        if cell.column_letter == "C":
+                                            if cell.value < 0:
+                                                cell.font = fonte_negativo  # Vermelho para negativos
+                                            elif cell.value > 0:
+                                                cell.font = fonte_positivo  # Azul para positivos
+                                            else:
+                                                cell.font = fonte_normal  # Zero mantém fonte normal
+                                        elif cell.column_letter == "F":
+                                            if cell.value < 0:
+                                                cell.font = fonte_negativo  # Vermelho para negativos
+                                            elif cell.value > 0:
+                                                cell.font = fonte_positivo  # Azul para positivos
+                                            else:
+                                                cell.font = fonte_normal  # Zero mantém fonte normal
                     
                     # Estilo para títulos (linhas com texto em negrito)
                     if cell.value and isinstance(cell.value, str):
@@ -241,18 +272,13 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                             cell.alignment = alinhamento_centro
                         
                         # Estilo para cabeçalhos de tabela
-                        elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Descrição", "Valor",
-                                          "Data Extrato", "Descrição Extrato", "Valor Extrato", 
-                                          "Data Controle", "Descrição Controle", "Valor Controle"]:
+                        elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Descrição", "Valor (R$)",
+                                          "Data Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
+                                          "Data Controle", "Descrição Controle", "Valor Controle (R$)"]:
                             cell.font = fonte_cabecalho
                             cell.fill = cor_cabecalho
                             cell.alignment = alinhamento_centro
             
-            # Aplica cor de fundo para linhas pares (opcional)
-            for i, row in enumerate(worksheet.iter_rows(min_row=1), start=1):
-                if i > 10 and i % 2 == 0:  # Começa após os cabeçalhos
-                    for cell in row:
-                        cell.fill = cor_linha_par
         
         # Ajusta a largura das colunas
         for sheet_name in writer.sheets:
