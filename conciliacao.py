@@ -39,7 +39,7 @@ def conciliacao(ex, cf):
         nome_usuario
     )
     
-    excel_bytes = r.exportar_relatorio_excel( df_relatorico_conv, df_relatorio_div)
+    excel_bytes = r.exportar_relatorio_excel(df_relatorico_conv, df_relatorio_div)
     
     return excel_bytes
     

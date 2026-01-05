@@ -1,9 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
-from openpyxl.formatting.rule import CellIsRule
-from openpyxl.utils import get_column_letter
 import io
 import funcoes_especificas as func
 import streamlit as st
@@ -230,33 +227,22 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                     # Aplica borda para todas as células
                     cell.border = borda
                     
-                    # Para células NÃO numéricas ou NÃO em colunas de valores
+                    # Para células NÃO numéricas
                     if not isinstance(cell.value, (int, float)):
                         # Aplica fonte normal e alinhamento
                         cell.font = fonte_normal
-                        if isinstance(cell.value, (int, float)):
-                            cell.alignment = alinhamento_direita
-                        else:
-                            cell.alignment = alinhamento_esquerda
+                        cell.alignment = alinhamento_esquerda                            
                     else :
-                        for i, row in enumerate(worksheet.iter_rows(min_row=17), start=17):
-                            if i > 17:
-                                for cell in row:
-                                    if isinstance(cell.value, (int, float)):
-                                        if cell.column_letter == "C":
-                                            if cell.value < 0:
-                                                cell.font = fonte_negativo  # Vermelho para negativos
-                                            elif cell.value > 0:
-                                                cell.font = fonte_positivo  # Azul para positivos
-                                            else:
-                                                cell.font = fonte_normal  # Zero mantém fonte normal
-                                        elif cell.column_letter == "F":
-                                            if cell.value < 0:
-                                                cell.font = fonte_negativo  # Vermelho para negativos
-                                            elif cell.value > 0:
-                                                cell.font = fonte_positivo  # Azul para positivos
-                                            else:
-                                                cell.font = fonte_normal  # Zero mantém fonte normal
+                        # Para células numéricas
+                        cell.alignment = alinhamento_direita
+                        
+                        if cell.row >= 18 and cell.column_letter in ["C", "F"]:
+                            if cell.value < 0:
+                                cell.font = fonte_negativo  # Vermelho para negativos
+                            elif cell.value > 0:
+                                cell.font = fonte_positivo  # Azul para positivos
+                            else:
+                                cell.font = fonte_normal  # Zero mantém fonte normal
                     
                     # Estilo para títulos (linhas com texto em negrito)
                     if cell.value and isinstance(cell.value, str):
