@@ -81,8 +81,7 @@ def criar_relatorio_conciliação(
             linha = {
                 'data': data_extrato,
                 'descricao': row.get('descricao_extrato', ''),
-                'valor': row.get('valor_extrato', 0) if pd.notna(row.get('valor_extrato')) else "vazio"
-                #'valor': f"R$ {row.get('valor_extrato', 0):,.2f}" if pd.notna(row.get('valor_extrato')) else "vazio"
+                'valor': float(row.get('valor_extrato', 0)) if pd.notna(row.get('valor_extrato')) else "vazio"
             }
             if linha['valor'] != "vazio":
                 extrato_divergente.append(linha)
@@ -108,8 +107,7 @@ def criar_relatorio_conciliação(
             linha = {
                 'data': data_controle,
                 'descricao': row.get('descricao_controle', ''),
-                'valor': row.get('valor_controle', 0) if pd.notna(row.get('valor_controle')) else "vazio"
-                #'valor': f"R$ {row.get('valor_controle', 0):,.2f}" if pd.notna(row.get('valor_controle')) else "vazio"
+                'valor': float(row.get('valor_controle', 0)) if pd.notna(row.get('valor_controle')) else "vazio"
             }
             if linha['valor'] != "vazio":
                 controle_divergente.append(linha)
@@ -142,12 +140,10 @@ def criar_relatorio_conciliação(
             linha = [
                 data_extrato,
                 row.get('descricao_extrato', ''),
-                row.get('valor_extrato', 0) if pd.notna(row.get('valor_extrato')) else "",
-                # f"R$ {row.get('valor_extrato', 0):,.2f}" if pd.notna(row.get('valor_extrato')) else "",
+                float(row.get('valor_extrato', 0)) if pd.notna(row.get('valor_extrato')) else "",
                 data_controle,
                 row.get('descricao_controle', ''),
-                row.get('valor_controle', 0) if pd.notna(row.get('valor_controle')) else "",
-                #f"R$ {row.get('valor_controle', 0):,.2f}" if pd.notna(row.get('valor_controle')) else ""
+                float(row.get('valor_controle', 0)) if pd.notna(row.get('valor_controle')) else "",
             ]
             relatorio_conv.append(linha)
     else:
