@@ -51,8 +51,7 @@ def criar_relatorio_conciliação(
     #relatorio_dados.append(["Taxa de Conciliação:", f"{(conciliadas/(conciliadas+nao_conciliadas)*100):.1f}%" if (conciliadas+nao_conciliadas) > 0 else "0%"])
     #relatorio_dados.append([])  # Linha em branco
     #relatorio_dados.append([])  # Linha em branco
-    
-    # OPERAÇÕES DIVERGENTES (NÃO CONCILIADAS)
+
     operacoes_divergentes = df_conciliado[df_conciliado['status_conciliacao'] == 'NÃO CONCILIADO']
     operacoes_convergentes = df_conciliado[df_conciliado['status_conciliacao'] == 'CONCILIADA']
     
@@ -68,7 +67,6 @@ def criar_relatorio_conciliação(
         cabecalho = [
             "Data", "Descrição", "Valor (R$)"
         ]
-        relatorio_div.append(cabecalho)
         
         # Adiciona dados que tem no extrato e não estão no controle financeiro
         relatorio_div.append(["Transações Não Conciliadas Presentes no Extrato:"])
@@ -87,6 +85,11 @@ def criar_relatorio_conciliação(
                 extrato_divergente.append(linha)
         
         extrato_divergente = func.ordenar_por_data_br(extrato_divergente)
+        sum_divergente_extrato = len(extrato_divergente)
+        
+        relatorio_div.append(["Total:", sum_divergente_extrato])
+        relatorio_div.append([])  # Linha em branco
+        relatorio_div.append(cabecalho)
         
         for i in extrato_divergente:
             relatorio_div.append([i['data'], i['descricao'], i['valor']])
@@ -95,8 +98,6 @@ def criar_relatorio_conciliação(
             
         # Adiciona dados que tem no controle financeiro e não estão no extrato
         relatorio_div.append(["Transações Não Conciliadas Presentes no Controle Financeiro:"])
-        
-        relatorio_div.append(cabecalho)
         
         controle_divergente = []
         for _, row in operacoes_divergentes.iterrows():
@@ -113,6 +114,12 @@ def criar_relatorio_conciliação(
                 controle_divergente.append(linha)
             
         controle_divergente = func.ordenar_por_data_br(controle_divergente)
+        sum_divergente_controle = len(controle_divergente)
+    
+        relatorio_div.append(["Total:", sum_divergente_controle])
+        relatorio_div.append([])  # Linha em branco
+        relatorio_div.append(cabecalho)
+        
         for i in controle_divergente:
                 relatorio_div.append([i['data'], i['descricao'], i['valor']])
             
@@ -121,17 +128,20 @@ def criar_relatorio_conciliação(
         
     # Relatório das Operações Conciliadas
     if len(operacoes_convergentes) > 0:
+        sum_convergentes = len(operacoes_convergentes)
+        
         relatorio_conv.append(["OPERAÇÕES CONVERGENTES (CONCILIADAS)"])
+        relatorio_conv.append(["Total de Operações Conciliadas:", sum_convergentes])
         relatorio_conv.append([])  # Linha em branco
         
-        # Cabeçalho das operações divergentes
+        # Cabeçalho das operações convergentes
         cabecalho = [
             "Data Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
             "Data Controle", "Descrição Controle", "Valor Controle (R$)"
         ]
         relatorio_conv.append(cabecalho)
         
-        # Adiciona cada operação divergente
+        # Adiciona cada operação convergente
         for _, row in operacoes_convergentes.iterrows():
             # Verifica se tem dados de data (pode não ter se for merge outer)
             data_extrato = row.get('data_extrato', '') if 'data_extrato' in row else ''
@@ -247,7 +257,9 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                             "DADOS GERAIS DA CONCILIAÇÃO", 
                             "RESUMO DE MOVIMENTAÇÕES",
                             "OPERAÇÕES DIVERGENTES",
-                            "OPERAÇÕES CONVERGENTES"
+                            "OPERAÇÕES CONVERGENTES",
+                            "Transações Não Conciliadas Presentes no Extrato:",
+                            "Transações Não Conciliadas Presentes no Controle Financeiro:"
                         ]):
                             cell.font = fonte_titulo
                             cell.fill = cor_titulo
