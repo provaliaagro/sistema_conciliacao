@@ -3,14 +3,11 @@ import pandas as pd
 import funcoes_especificas as func
 import relatorio as r
 
-def conciliacao(ex, cf):
+def conciliacao(ex, cf, si, sf):
     # st.write("### Dataframe Extrato")
     # st.dataframe(ex)
     #st.write("### Dataframe Controle Financeiro")
     #st.dataframe(cf)
-
-    # Extração dos saldos
-    saldo_inicial, saldo_final, ex = func.extrair_saldos(ex)
     
     # Quantidade de movimentações
     mov_extrato, entradas_extrato, saidas_extrato = func.contar_movimentacoes(ex)
@@ -32,8 +29,8 @@ def conciliacao(ex, cf):
     
     df_relatorico_conv, df_relatorio_div = r.criar_relatorio_conciliação(
         resultado,
-        saldo_inicial,
-        saldo_final,
+        si,
+        sf,
         mov_extrato,
         mov_controle,
         nome_usuario

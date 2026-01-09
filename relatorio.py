@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+from openpyxl.styles import Font, Alignment, PatternFill, Border, Side, NamedStyle
 import io
 import funcoes_especificas as func
 import streamlit as st
@@ -30,8 +30,8 @@ def criar_relatorio_conciliação(
     
     # DADOS GERAIS DA CONCILIAÇÃO
     relatorio_dados.append(["DADOS GERAIS DA CONCILIAÇÃO"])
-    relatorio_dados.append(["Saldo Inicial da Conta:", f"R$ {saldo_inicial:,.2f}"])
-    relatorio_dados.append(["Saldo Final da Conta:", f"R$ {saldo_final:,.2f}"])
+    relatorio_dados.append(["Saldo Inicial da Conta:", saldo_inicial])
+    relatorio_dados.append(["Saldo Final da Conta:", saldo_final])
     relatorio_dados.append([])  # Linha em branco
     
     # RESUMO DE MOVIMENTAÇÕES
@@ -217,6 +217,9 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
         alinhamento_esquerda = Alignment(horizontal='left', vertical='center')
         alinhamento_direita = Alignment(horizontal='right', vertical='center')
         
+        # 5. Formato do Número
+        formato_numero = "#,##0.00"
+        
         # Aplica estilos em ambas as abas
         for sheet_name in ['Transações Conciliadas', 'Transações Não Conciliadas']:
             worksheet = workbook[sheet_name]
@@ -242,7 +245,17 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                         # Para células numéricas
                         cell.alignment = alinhamento_direita
                         
+                        if (cell.row == 7 or cell.row == 8) and cell.column_letter is "B":
+                            cell.number_format = formato_numero
+                            if cell.value < 0:
+                                cell.font = fonte_negativo  # Vermelho para negativos
+                            elif cell.value > 0:
+                                cell.font = fonte_positivo  # Azul para positivos
+                            else:
+                                cell.font = fonte_normal  # Zero mantém fonte normal
+                            
                         if cell.row >= 18 and cell.column_letter in ["C", "F"]:
+                            cell.number_format = formato_numero
                             if cell.value < 0:
                                 cell.font = fonte_negativo  # Vermelho para negativos
                             elif cell.value > 0:

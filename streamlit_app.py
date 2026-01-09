@@ -40,10 +40,15 @@ st.session_state.df_extrato = None
 st.session_state.df_controle = None
 st.session_state.excel = None
 
-   
+st.title("Sistema CBA | Provalia")
+st.success(f"Bem-vindo(a), {st.session_state["nome"]}!")
+st.markdown("### Saldos Relacionados à conciliação:") 
+saldo_inicial = st.number_input("Informe o saldo inicial (R$):")
+saldo_final = st.number_input("Informe o saldo final (R$):")
+st.session_state.saldo_inicial = saldo_inicial
+st.session_state.saldo_final = saldo_final
+
 if st.session_state.df_extrato is None:
-    st.title("Sistema CBA | Provalia")
-    st.success(f"Bem-vindo(a), {st.session_state["nome"]}!")
     st.markdown("### Selecione o arquivo do Extrato Bancário") 
     extrato = st.file_uploader("Extrato extraído do banco SICOOB no formato Excel", type="xlsx")
     # Para fazer o tratamento de dados do extrato
@@ -64,8 +69,6 @@ if st.session_state.df_extrato is None:
             if "valor" in df_extrato.columns:
                 df_extrato = func.remover_linhas_vazias(df_extrato)
                 df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                df_extrato = func.filtrar_saldos_duplicados(df_extrato)
-                df_extrato = func.converter_coluna_data_brasileira(df_extrato)
                 df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)
                 
                 # Verifica se há valores que não puderam ser convertidos
@@ -88,6 +91,7 @@ if st.session_state.df_extrato is None:
             st.error(f"Erro ao processar arquivo: {e}")
     # Para fazer upload do controle financeiro
     if st.session_state.df_extrato is not None:
+        st.markdown("### Selecione o arquivo do Controle Financeiro") 
         controle_financeiro = st.file_uploader("Controle Financeiro extraído do sistema Perfarm no formato Excel", type="xlsx")
         # st.write("### Dados do Controle Financeiro:")
         # Para fazer o tratamento de dados do controle financeiro
@@ -121,7 +125,7 @@ if st.session_state.df_controle is not None:
     if st.button("Processar Conciliação"):
         barra_progresso = st.progress(0)
         barra_progresso.progress(20)
-        excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle)
+        excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, st.session_state.saldo_final)
         barra_progresso.progress(50)
         st.session_state.excel = excel_bytes
         barra_progresso.progress(70)
