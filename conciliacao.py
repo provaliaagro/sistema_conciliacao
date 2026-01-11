@@ -10,8 +10,9 @@ def conciliacao(ex, cf, si, sf):
     #st.dataframe(cf)
     
     # Quantidade de movimentações
-    mov_extrato, entradas_extrato, saidas_extrato = func.contar_movimentacoes(ex)
-    mov_controle, entradas_controle, saidas_controle = func.contar_movimentacoes(cf)
+    mov_extrato, entradas_extrato, saidas_extrato, total_extrato = func.contar_movimentacoes(ex)
+    
+    mov_controle, entradas_controle, saidas_controle, total_controle = func.contar_movimentacoes(cf)
     
     #st.write(f"Foram realizadas {mov_extrato} movimentações computadas pelo extrato")
     #st.write(f"Destas {entradas_extrato} foram entradas")
@@ -33,6 +34,8 @@ def conciliacao(ex, cf, si, sf):
         sf,
         mov_extrato,
         mov_controle,
+        total_extrato,
+        total_controle,
         nome_usuario
     )
     

@@ -230,20 +230,6 @@ def converter_valor_reais(valor_str):
         
     except (ValueError, AttributeError, TypeError):
         return None
-    
-def converter_coluna_data_brasileira(df, coluna_data='data'):
-    """
-    Converte coluna inteira de datas para formato brasileiro
-    """
-    df_temp = df.copy()
-    
-    # Converte para datetime
-    df_temp[coluna_data] = pd.to_datetime(df_temp[coluna_data], errors='coerce')
-    
-    # Formata para brasileiro
-    df_temp[coluna_data] = df_temp[coluna_data].dt.strftime('%d/%m/%Y')
-    
-    return df_temp
 
 def contar_movimentacoes(df, coluna_descricao='descricao', coluna_valor='valor_convertido'):
     """
@@ -253,24 +239,28 @@ def contar_movimentacoes(df, coluna_descricao='descricao', coluna_valor='valor_c
         tuple: (total_movimentacoes, total_entradas, total_saidas)
     """
     # Filtra linhas sem 'SALDO'
-    mask_sem_saldos = ~df[coluna_descricao].astype(str).str.upper().str.contains('SALDO', na=False)
-    df_movimentacoes = df[mask_sem_saldos]
+    df_movimentacoes = df
     
     # Conta totais
     total_movimentacoes = len(df_movimentacoes)
     
+    total_valor = 0
     # Conta entradas (valores positivos) e saídas (valores negativos)
     if coluna_valor in df_movimentacoes.columns:
         entradas = len(df_movimentacoes[df_movimentacoes[coluna_valor] > 0])
         saidas = len(df_movimentacoes[df_movimentacoes[coluna_valor] < 0])
+        total_valor += df_movimentacoes[coluna_valor]
     else:
         entradas = saidas = 0
+        
+    total_valor = sum(total_valor)
     
-    return total_movimentacoes, entradas, saidas
+    return total_movimentacoes, entradas, saidas, total_valor
 
 def conciliacao_simples(df_extrato, df_controle):
     """
     Compara os valores e datas dos dois dataframes e retorna um dataframe conciliado
+    Garante que cada valor converja com apenas um outro valor
     
     Args:
         df_extrato: DataFrame do extrato bancário
@@ -281,39 +271,125 @@ def conciliacao_simples(df_extrato, df_controle):
     """
     
     # Prepara os dataframes
-    df_e = df_extrato[['data', 'descricao', 'valor_convertido',]].copy()
+    df_e = df_extrato[['data', 'descricao', 'valor_convertido']].copy()
     df_e.columns = ['data_extrato', 'descricao_extrato', 'valor_extrato']
     
-    df_c = df_controle[['data','descricao', 'valor_convertido']].copy()
+    df_c = df_controle[['data', 'descricao', 'valor_convertido']].copy()
     df_c.columns = ['data_controle', 'descricao_controle', 'valor_controle']
     
-    # Adicionar IDs únicos para cada linha
-    df_e['_id'] = range(len(df_e))
-    df_c['_id'] = range(len(df_c))
+    # Resetar índices para IDs únicos
+    df_e = df_e.reset_index(drop=True).reset_index().rename(columns={'index': '_id_extrato'})
+    df_c = df_c.reset_index(drop=True).reset_index().rename(columns={'index': '_id_controle'})
     
-    # Faz o merge por valor E data (strings no formato brasileiro)
-    df_final = pd.merge(
-        df_e,
-        df_c,
-        left_on=['valor_extrato'],
-        right_on=['valor_controle'],
-        how='outer',
-        suffixes=('_extrato','_controle')
+    # Criar colunas auxiliares para marcar matches
+    df_e['_matched'] = False
+    df_c['_matched'] = False
+    
+    # Lista para armazenar os matches encontrados
+    matches = []
+    
+    # PERCORRER POR ORDEM PARA GARANTIR REPRODUTIBILIDADE
+    # Ordenar por valor para matching consistente
+    df_e_sorted = df_e.sort_values(['valor_extrato', '_id_extrato']).reset_index(drop=True)
+    df_c_sorted = df_c.sort_values(['valor_controle', '_id_controle']).reset_index(drop=True)
+    
+    # Fazer matching 1:1
+    c_index = 0
+    for e_idx in range(len(df_e_sorted)):
+        if df_e_sorted.loc[e_idx, '_matched']:
+            continue
+            
+        valor_e = df_e_sorted.loc[e_idx, 'valor_extrato']
+        
+        # Encontrar primeiro match não utilizado no controle
+        while c_index < len(df_c_sorted):
+            if (not df_c_sorted.loc[c_index, '_matched'] and 
+                df_c_sorted.loc[c_index, 'valor_controle'] == valor_e):
+                
+                # Encontrou match!
+                matches.append({
+                    '_id_extrato': df_e_sorted.loc[e_idx, '_id_extrato'],
+                    '_id_controle': df_c_sorted.loc[c_index, '_id_controle']
+                })
+                
+                # Marcar como utilizado
+                df_e_sorted.loc[e_idx, '_matched'] = True
+                df_c_sorted.loc[c_index, '_matched'] = True
+                
+                c_index += 1  # Avançar para próximo no controle
+                break
+            c_index += 1
+        else:
+            # Se não encontrou match, avançar para próximo no extrato
+            c_index = 0  # Resetar busca no controle
+    
+    # AGORA CRIAR O DATAFRAME FINAL COM TODAS AS LINHAS
+    
+    # 1. Começar com todos os matches
+    matches_df = pd.DataFrame(matches) if matches else pd.DataFrame(
+        columns=['_id_extrato', '_id_controle']
     )
     
-    # Remover IDs
-    df_final = df_final.drop(columns=['_id_extrato', '_id_controle'])
+    # 2. Criar dataframe com todas as linhas do extrato (com ou sem match)
+    df_result_e = pd.merge(
+        df_e[['_id_extrato', 'data_extrato', 'descricao_extrato', 'valor_extrato']],
+        matches_df,
+        on='_id_extrato',
+        how='left'
+    )
     
-    # Cria status
-    df_final['status_conciliacao'] = df_final.apply(
+    # 3. Adicionar dados do controle para as que têm match
+    df_result = pd.merge(
+        df_result_e,
+        df_c[['_id_controle', 'data_controle', 'descricao_controle', 'valor_controle']],
+        on='_id_controle',
+        how='left'
+    )
+    
+    # 4. Adicionar as linhas do controle que NÃO foram usadas em nenhum match
+    # Primeiro, identificar IDs do controle que não foram usados
+    ids_controle_usados = matches_df['_id_controle'].dropna().unique()
+    linhas_controle_nao_usadas = df_c[~df_c['_id_controle'].isin(ids_controle_usados)].copy()
+    
+    # Criar DataFrame para as linhas não usadas do controle
+    if not linhas_controle_nao_usadas.empty:
+        df_controle_sem_match = pd.DataFrame({
+            'data_extrato': [None] * len(linhas_controle_nao_usadas),
+            'descricao_extrato': [None] * len(linhas_controle_nao_usadas),
+            'valor_extrato': [None] * len(linhas_controle_nao_usadas),
+            '_id_extrato': [None] * len(linhas_controle_nao_usadas),
+            '_id_controle': linhas_controle_nao_usadas['_id_controle'].values,
+            'data_controle': linhas_controle_nao_usadas['data_controle'].values,
+            'descricao_controle': linhas_controle_nao_usadas['descricao_controle'].values,
+            'valor_controle': linhas_controle_nao_usadas['valor_controle'].values
+        })
+        
+        # Concatenar com os resultados anteriores
+        df_result = pd.concat([df_result, df_controle_sem_match], ignore_index=True)
+    
+    # Remover colunas auxiliares
+    df_result = df_result.drop(columns=['_id_extrato', '_id_controle'], errors='ignore')
+    
+    # Cria status - IMPORTANTE: considerar todas as combinações
+    df_result['status_conciliacao'] = df_result.apply(
         lambda x: "CONCILIADA" if (
-            pd.notna(x['descricao_extrato']) and 
-            pd.notna(x['descricao_controle'])
+            pd.notna(x.get('descricao_extrato')) and 
+            pd.notna(x.get('descricao_controle'))
         ) else "NÃO CONCILIADO",
         axis=1
     )
     
-    return df_final
+    # Reordenar colunas para melhor visualização
+    col_order = [
+        'data_extrato', 'descricao_extrato', 'valor_extrato',
+        'data_controle', 'descricao_controle', 'valor_controle',
+        'status_conciliacao'
+    ]
+    
+    # Garantir que todas as colunas existam
+    col_order = [col for col in col_order if col in df_result.columns]
+    
+    return df_result[col_order]
 
 def ordenar_por_data_br(lista_dados, campo_data='data'):
         """Ordena lista de dicionários por data no formato brasileiro DD/MM/YYYY"""

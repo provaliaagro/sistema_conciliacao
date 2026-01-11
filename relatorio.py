@@ -11,6 +11,8 @@ def criar_relatorio_conciliação(
     saldo_final, 
     mov_extrato, 
     mov_controle,
+    total_extrato,
+    total_controle,
     nome_usuario
 ):
     """
@@ -38,6 +40,7 @@ def criar_relatorio_conciliação(
     relatorio_dados.append(["RESUMO DE MOVIMENTAÇÕES"])
     relatorio_dados.append(["", "EXTRATO", "CONTROLE FINANCEIRO"])
     relatorio_dados.append(["Total de Movimentações:", mov_extrato, mov_controle])
+    relatorio_dados.append(["Valor Total:", total_extrato, total_controle])
     relatorio_dados.append([])  # Linha em branco
     relatorio_dados.append([])  # Linha em branco
     
@@ -86,8 +89,12 @@ def criar_relatorio_conciliação(
         
         extrato_divergente = func.ordenar_por_data_br(extrato_divergente)
         sum_divergente_extrato = len(extrato_divergente)
+        total_divergente_extrato = 0
+        for i in extrato_divergente:
+            total_divergente_extrato += i['valor']
         
-        relatorio_div.append(["Total:", sum_divergente_extrato])
+        relatorio_div.append(["Total de Transações Não Conciliadas:", sum_divergente_extrato])
+        relatorio_div.append(["Valor Total das Transações Não Conciliadas (R$):", total_divergente_extrato])
         relatorio_div.append([])  # Linha em branco
         relatorio_div.append(cabecalho)
         
@@ -115,8 +122,12 @@ def criar_relatorio_conciliação(
             
         controle_divergente = func.ordenar_por_data_br(controle_divergente)
         sum_divergente_controle = len(controle_divergente)
+        total_divergente_controle = 0
+        for i in controle_divergente:
+            total_divergente_controle += i['valor']
     
-        relatorio_div.append(["Total:", sum_divergente_controle])
+        relatorio_div.append(["Total de Transações Não Conciliadas:", sum_divergente_controle])
+        relatorio_div.append(["Valor Total das Transações Não Conciliadas (R$):", total_divergente_controle])
         relatorio_div.append([])  # Linha em branco
         relatorio_div.append(cabecalho)
         
@@ -129,9 +140,11 @@ def criar_relatorio_conciliação(
     # Relatório das Operações Conciliadas
     if len(operacoes_convergentes) > 0:
         sum_convergentes = len(operacoes_convergentes)
+        total_convergentes = sum(operacoes_convergentes['valor_extrato'])
         
         relatorio_conv.append(["OPERAÇÕES CONVERGENTES (CONCILIADAS)"])
-        relatorio_conv.append(["Total de Operações Conciliadas:", sum_convergentes])
+        relatorio_conv.append(["Total de Transações Conciliadas:", sum_convergentes])
+        relatorio_conv.append(["Valor Total Conciliado (R$):", total_convergentes])
         relatorio_conv.append([])  # Linha em branco
         
         # Cabeçalho das operações convergentes
@@ -245,7 +258,9 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                         # Para células numéricas
                         cell.alignment = alinhamento_direita
                         
-                        if (cell.row == 7 or cell.row == 8) and cell.column_letter is "B":
+                        # Formatando o cabeçalho
+                        cabecalho_numerico = [7, 8, 13, 17, 18]
+                        if cell.row in cabecalho_numerico and cell.column_letter in ["B", "C"]:
                             cell.number_format = formato_numero
                             if cell.value < 0:
                                 cell.font = fonte_negativo  # Vermelho para negativos
@@ -253,9 +268,12 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                                 cell.font = fonte_positivo  # Azul para positivos
                             else:
                                 cell.font = fonte_normal  # Zero mantém fonte normal
-                            
-                        if cell.row >= 18 and cell.column_letter in ["C", "F"]:
+                        
+                        
+                        # Formatando as demais colunas
+                        if cell.row >= 19 and cell.column_letter in ["B", "C", "F"]:
                             cell.number_format = formato_numero
+                            
                             if cell.value < 0:
                                 cell.font = fonte_negativo  # Vermelho para negativos
                             elif cell.value > 0:

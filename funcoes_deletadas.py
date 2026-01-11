@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def extrair_saldos(df, coluna_descricao='descricao', coluna_valor='valor_convertido'):
     """
     Extrai saldo anterior e saldo do dia do dataframe
@@ -56,3 +59,65 @@ def filtrar_saldos_duplicados(df, coluna_descricao='descricao', coluna_data='dat
     df_filtrado = pd.concat([linhas_nao_saldos, ultimo_saldo]).sort_index()
     
     return df_filtrado
+
+
+def converter_coluna_data_brasileira(df, coluna_data='data'):
+    """
+    Converte coluna inteira de datas para formato brasileiro
+    """
+    df_temp = df.copy()
+    
+    # Converte para datetime
+    df_temp[coluna_data] = pd.to_datetime(df_temp[coluna_data], errors='coerce')
+    
+    # Formata para brasileiro
+    df_temp[coluna_data] = df_temp[coluna_data].dt.strftime('%d/%m/%Y')
+    
+    return df_temp
+
+def conciliacao_simples(df_extrato, df_controle):
+    """
+    Compara os valores e datas dos dois dataframes e retorna um dataframe conciliado
+    
+    Args:
+        df_extrato: DataFrame do extrato bancário
+        df_controle: DataFrame do controle financeiro
+    
+    Returns:
+        DataFrame com as colunas de conciliação
+    """
+    
+    # Prepara os dataframes
+    df_e = df_extrato[['data', 'descricao', 'valor_convertido',]].copy()
+    df_e.columns = ['data_extrato', 'descricao_extrato', 'valor_extrato']
+    
+    df_c = df_controle[['data','descricao', 'valor_convertido']].copy()
+    df_c.columns = ['data_controle', 'descricao_controle', 'valor_controle']
+    
+    # Adicionar IDs únicos para cada linha
+    df_e['_id'] = range(len(df_e))
+    df_c['_id'] = range(len(df_c))
+    
+    # Faz o merge por valor (strings no formato brasileiro)
+    df_final = pd.merge(
+        df_e,
+        df_c,
+        left_on=['valor_extrato'],
+        right_on=['valor_controle'],
+        how='outer',
+        suffixes=('_extrato','_controle')
+    )
+    
+    # Remover IDs
+    df_final = df_final.drop(columns=['_id_extrato', '_id_controle'])
+    
+    # Cria status
+    df_final['status_conciliacao'] = df_final.apply(
+        lambda x: "CONCILIADA" if (
+            pd.notna(x['descricao_extrato']) and 
+            pd.notna(x['descricao_controle'])
+        ) else "NÃO CONCILIADO",
+        axis=1
+    )
+    
+    return df_final
