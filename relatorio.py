@@ -7,8 +7,7 @@ import streamlit as st
 
 def criar_relatorio_conciliação(
     df_conciliado,
-    saldo_inicial, 
-    saldo_final, 
+    saldo_inicial,  
     mov_extrato, 
     mov_controle,
     total_extrato,
@@ -32,15 +31,11 @@ def criar_relatorio_conciliação(
     
     # DADOS GERAIS DA CONCILIAÇÃO
     relatorio_dados.append(["DADOS GERAIS DA CONCILIAÇÃO"])
-    relatorio_dados.append(["Saldo Inicial da Conta:", saldo_inicial])
-    relatorio_dados.append(["Saldo Final da Conta:", saldo_final])
-    relatorio_dados.append([])  # Linha em branco
-    
-    # RESUMO DE MOVIMENTAÇÕES
-    relatorio_dados.append(["RESUMO DE MOVIMENTAÇÕES"])
     relatorio_dados.append(["", "EXTRATO", "CONTROLE FINANCEIRO"])
     relatorio_dados.append(["Total de Movimentações:", mov_extrato, mov_controle])
-    relatorio_dados.append(["Valor Total:", total_extrato, total_controle])
+    relatorio_dados.append(["Saldo Inicial (R$):", saldo_inicial, saldo_inicial])
+    relatorio_dados.append(["Valor Total Movimentado (R$):", total_extrato, total_controle])
+    relatorio_dados.append(["Saldo Final (R$):", st.session_state.saldo_final_ex, st.session_state.saldo_final_cf])
     relatorio_dados.append([])  # Linha em branco
     relatorio_dados.append([])  # Linha em branco
     
@@ -217,9 +212,11 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
         fonte_positivo = Font(name='Calibri', size=10, color='0000FF')
         
         # 2. Cores
-        cor_titulo = PatternFill(start_color='d0d0d0', end_color='366092', fill_type='solid')
-        cor_cabecalho = PatternFill(start_color='d0d0d0', end_color='4F81BD', fill_type='solid')
+        cor_titulo_conciliado = PatternFill(start_color='5fb7fa', end_color='5fb7fa', fill_type='solid')
+        cor_cabecalho_conciliado = PatternFill(start_color='5fb7fa', end_color='5fb7fa', fill_type='solid')
         cor_linha_par = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
+        cor_titulo_divergente = PatternFill(start_color='fc7474', end_color='fc7474', fill_type='solid')
+        cor_cabecalho_divergente = PatternFill(start_color='fc7474', end_color='fc7474', fill_type='solid')
         
         # 3. Borda
         borda_fina = Side(border_style='thin', color='D0D0D0')
@@ -259,7 +256,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                         cell.alignment = alinhamento_direita
                         
                         # Formatando o cabeçalho
-                        cabecalho_numerico = [7, 8, 13, 17, 18]
+                        cabecalho_numerico = [9, 10, 11, 16, 18]
                         if cell.row in cabecalho_numerico and cell.column_letter in ["B", "C"]:
                             cell.number_format = formato_numero
                             if cell.value < 0:
@@ -282,27 +279,46 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                                 cell.font = fonte_normal  # Zero mantém fonte normal
                     
                     # Estilo para títulos (linhas com texto em negrito)
-                    if cell.value and isinstance(cell.value, str):
-                        if any(titulo in cell.value for titulo in [
-                            "RELATÓRIO FINAL DE CONCILIAÇÃO BANCÁRIA",
-                            "DADOS GERAIS DA CONCILIAÇÃO", 
-                            "RESUMO DE MOVIMENTAÇÕES",
-                            "OPERAÇÕES DIVERGENTES",
-                            "OPERAÇÕES CONVERGENTES",
-                            "Transações Não Conciliadas Presentes no Extrato:",
-                            "Transações Não Conciliadas Presentes no Controle Financeiro:"
-                        ]):
-                            cell.font = fonte_titulo
-                            cell.fill = cor_titulo
-                            cell.alignment = alinhamento_centro
-                        
-                        # Estilo para cabeçalhos de tabela
-                        elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Descrição", "Valor (R$)",
-                                          "Data Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
-                                          "Data Controle", "Descrição Controle", "Valor Controle (R$)"]:
-                            cell.font = fonte_cabecalho
-                            cell.fill = cor_cabecalho
-                            cell.alignment = alinhamento_centro
+                    if sheet_name == "Transações Conciliadas":
+                        if cell.value and isinstance(cell.value, str):
+                            
+                            if any(titulo in cell.value for titulo in [
+                                "RELATÓRIO FINAL DE CONCILIAÇÃO BANCÁRIA",
+                                "DADOS GERAIS DA CONCILIAÇÃO", 
+                                "RESUMO DE MOVIMENTAÇÕES",
+                                "OPERAÇÕES CONVERGENTES",
+                            ]):
+                                cell.font = fonte_titulo
+                                cell.fill = cor_titulo_conciliado
+                                cell.alignment = alinhamento_centro
+                            
+                            # Estilo para cabeçalhos de tabela
+                            elif cell.value in ["EXTRATO","CONTROLE FINANCEIRO","Data Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
+                                            "Data Controle", "Descrição Controle", "Valor Controle (R$)"]:
+                                cell.font = fonte_cabecalho
+                                cell.fill = cor_cabecalho_conciliado
+                                cell.alignment = alinhamento_centro
+                                
+                    elif sheet_name == "Transações Não Conciliadas":
+                        if cell.value and isinstance(cell.value, str):
+                            
+                            if any(titulo in cell.value for titulo in [
+                                "RELATÓRIO FINAL DE CONCILIAÇÃO BANCÁRIA",
+                                "DADOS GERAIS DA CONCILIAÇÃO", 
+                                "RESUMO DE MOVIMENTAÇÕES",
+                                "OPERAÇÕES DIVERGENTES",
+                                "Transações Não Conciliadas Presentes no Extrato:",
+                                "Transações Não Conciliadas Presentes no Controle Financeiro:"
+                            ]):
+                                cell.font = fonte_titulo
+                                cell.fill = cor_titulo_divergente
+                                cell.alignment = alinhamento_centro
+                            
+                            # Estilo para cabeçalhos de tabela
+                            elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Descrição", "Valor (R$)"]:
+                                cell.font = fonte_cabecalho
+                                cell.fill = cor_cabecalho_divergente
+                                cell.alignment = alinhamento_centro
             
         
         # Ajusta a largura das colunas

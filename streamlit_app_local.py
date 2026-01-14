@@ -12,9 +12,7 @@ st.session_state.excel = None
 st.title("Sistema CBA | Provalia")
 st.markdown("### Saldos Relacionados à conciliação:") 
 saldo_inicial = st.number_input("Informe o saldo inicial (R$):")
-saldo_final = st.number_input("Informe o saldo final (R$):")
 st.session_state.saldo_inicial = saldo_inicial
-st.session_state.saldo_final = saldo_final
 
 if st.session_state.df_extrato is None:
     st.markdown("### Selecione o arquivo do Extrato Bancário") 
@@ -24,10 +22,10 @@ if st.session_state.df_extrato is None:
         try:
             indices_extrato = ["data", "descricao", "valor"]
             df_extrato = pd.read_excel(extrato, engine="openpyxl")
-            df_extrato = df_extrato.iloc[2:]
+            df_extrato = df_extrato.iloc[1:]
             df_extrato = df_extrato.iloc[:, [0,2,3]]
             df_extrato.columns = indices_extrato
-            
+            # Ordena o dataframe
             df_extrato = func.ordernar_arquivo(df_extrato)
                         
             st.session_state['df_extrato'] = df_extrato
@@ -37,7 +35,7 @@ if st.session_state.df_extrato is None:
             if "valor" in df_extrato.columns:
                 df_extrato = func.remover_linhas_vazias(df_extrato)
                 df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)
+                df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
                 
                 # Verifica se há valores que não puderam ser convertidos
                 valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
@@ -94,7 +92,7 @@ if st.session_state.df_controle is not None:
     if st.button("Processar Conciliação"):
         barra_progresso = st.progress(0)
         barra_progresso.progress(20)
-        excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, st.session_state.saldo_final)
+        excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial)
         barra_progresso.progress(50)
         st.session_state.excel = excel_bytes
         barra_progresso.progress(70)
