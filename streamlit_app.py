@@ -53,9 +53,8 @@ if st.session_state.df_extrato is None:
     if extrato is not None:
         try:
             indices_extrato = ["data", "descricao", "valor"]
-            df_extrato = pd.read_excel(extrato, engine="openpyxl")
-            df_extrato = df_extrato.iloc[1:]
-            df_extrato = df_extrato.iloc[:, [0,2,3]]
+            df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
+            df_extrato = df_extrato[["DATA", "HISTÓRICO", "VALOR"]]
             df_extrato.columns = indices_extrato
             
             df_extrato = func.ordernar_arquivo(df_extrato)
