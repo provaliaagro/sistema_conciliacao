@@ -94,13 +94,13 @@ if st.session_state.df_extrato is None:
         # Para fazer o tratamento de dados do controle financeiro
         if controle_financeiro is not None:
             try: 
-                indices_controle = ["data", "descricao", "valor"]
+                indices_controle = ["data", "recurso", "contraparte", "valor"]
                 df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
                 st.session_state['df_controle'] = df_controle
-                df_controle = df_controle[["Data", "Contraparte", "Valor"]]
+                df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
                 df_controle.columns = indices_controle
                 df_controle = func.remover_linhas_vazias(df_controle)
-                df_controle = func.remover_linhas_desnecessarias(df_controle)
+                df_controle = func.remover_linhas_desnecessarias(df_controle, 'recurso')
                 df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
                 # Verifica se há valores que não puderam ser convertidos
                 valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
