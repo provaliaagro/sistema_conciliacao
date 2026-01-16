@@ -137,11 +137,9 @@ def remover_linhas_vazias(df, colunas_verificar=['descricao', 'valor']):
             )
             df_limpo = df_limpo[mask]
     
-    linhas_removidas = len(df) - len(df_limpo)
-    
     return df_limpo
 
-def remover_linhas_desnecessarias(df, palavras_remover=None, coluna_descricao='descricao'):
+def remover_linhas_desnecessarias(df, coluna_descricao='descricao', palavras_remover=None):
     """
     Remove linhas baseadas em palavras ou partes de palavras no histórico
     
@@ -231,7 +229,7 @@ def converter_valor_reais(valor_str):
     except (ValueError, AttributeError, TypeError):
         return None
 
-def contar_movimentacoes(df, coluna_descricao='descricao', coluna_valor='valor_convertido'):
+def contar_movimentacoes(df, coluna_valor='valor_convertido'):
     """
     Conta movimentações, entradas e saídas excluindo linhas com descrição igual a 'SALDO' e derivadas disso
     
@@ -274,8 +272,8 @@ def conciliacao_simples(df_extrato, df_controle):
     df_e = df_extrato[['data', 'descricao', 'valor_convertido']].copy()
     df_e.columns = ['data_extrato', 'descricao_extrato', 'valor_extrato']
     
-    df_c = df_controle[['data', 'descricao', 'valor_convertido']].copy()
-    df_c.columns = ['data_controle', 'descricao_controle', 'valor_controle']
+    df_c = df_controle[['data', 'recurso', 'contraparte', 'valor_convertido']].copy()
+    df_c.columns = ['data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle']
     
     # Resetar índices para IDs únicos
     df_e = df_e.reset_index(drop=True).reset_index().rename(columns={'index': '_id_extrato'})
@@ -341,7 +339,7 @@ def conciliacao_simples(df_extrato, df_controle):
     # 3. Adicionar dados do controle para as que têm match
     df_result = pd.merge(
         df_result_e,
-        df_c[['_id_controle', 'data_controle', 'descricao_controle', 'valor_controle']],
+        df_c[['_id_controle', 'data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle']],
         on='_id_controle',
         how='left'
     )
@@ -360,7 +358,8 @@ def conciliacao_simples(df_extrato, df_controle):
             '_id_extrato': [None] * len(linhas_controle_nao_usadas),
             '_id_controle': linhas_controle_nao_usadas['_id_controle'].values,
             'data_controle': linhas_controle_nao_usadas['data_controle'].values,
-            'descricao_controle': linhas_controle_nao_usadas['descricao_controle'].values,
+            'recurso_controle': linhas_controle_nao_usadas['recurso_controle'].values,
+            'contraparte_controle': linhas_controle_nao_usadas['contraparte_controle'].values,
             'valor_controle': linhas_controle_nao_usadas['valor_controle'].values
         })
         
@@ -374,7 +373,7 @@ def conciliacao_simples(df_extrato, df_controle):
     df_result['status_conciliacao'] = df_result.apply(
         lambda x: "CONCILIADA" if (
             pd.notna(x.get('descricao_extrato')) and 
-            pd.notna(x.get('descricao_controle'))
+            (pd.notna(x.get('recurso_controle')) or pd.notna(x.get('contraparte_controle')))
         ) else "NÃO CONCILIADO",
         axis=1
     )
@@ -382,7 +381,7 @@ def conciliacao_simples(df_extrato, df_controle):
     # Reordenar colunas para melhor visualização
     col_order = [
         'data_extrato', 'descricao_extrato', 'valor_extrato',
-        'data_controle', 'descricao_controle', 'valor_controle',
+        'data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle',
         'status_conciliacao'
     ]
     

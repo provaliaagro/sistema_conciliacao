@@ -62,8 +62,12 @@ def criar_relatorio_conciliação(
         relatorio_div.append([])  # Linha em branco
         
         # Cabeçalho das operações divergentes
-        cabecalho = [
-            "Data", "Descrição", "Valor (R$)"
+        cabecalho_extrato = [
+            "Data", "Descrição", "Valor (R$)", "Crítica"
+        ]
+        
+        cabecalho_controle = [
+            "Data", "Recurso", "Contraparte", "Valor (R$)", "Crítica"
         ]
         
         # Adiciona dados que tem no extrato e não estão no controle financeiro
@@ -91,10 +95,10 @@ def criar_relatorio_conciliação(
         relatorio_div.append(["Total de Transações Não Conciliadas:", sum_divergente_extrato])
         relatorio_div.append(["Valor Total das Transações Não Conciliadas (R$):", total_divergente_extrato])
         relatorio_div.append([])  # Linha em branco
-        relatorio_div.append(cabecalho)
+        relatorio_div.append(cabecalho_extrato)
         
         for i in extrato_divergente:
-            relatorio_div.append([i['data'], i['descricao'], i['valor']])
+            relatorio_div.append([i['data'], i['descricao'], i['valor'], ''])
             
         relatorio_div.append([])
             
@@ -109,7 +113,8 @@ def criar_relatorio_conciliação(
             
             linha = {
                 'data': data_controle,
-                'descricao': row.get('descricao_controle', ''),
+                'recurso': row.get('recurso_controle', ''),
+                'contraparte': row.get('contraparte_controle', ''),
                 'valor': float(row.get('valor_controle', 0)) if pd.notna(row.get('valor_controle')) else "vazio"
             }
             if linha['valor'] != "vazio":
@@ -124,10 +129,10 @@ def criar_relatorio_conciliação(
         relatorio_div.append(["Total de Transações Não Conciliadas:", sum_divergente_controle])
         relatorio_div.append(["Valor Total das Transações Não Conciliadas (R$):", total_divergente_controle])
         relatorio_div.append([])  # Linha em branco
-        relatorio_div.append(cabecalho)
+        relatorio_div.append(cabecalho_controle)
         
         for i in controle_divergente:
-                relatorio_div.append([i['data'], i['descricao'], i['valor']])
+                relatorio_div.append([i['data'], i['recurso'], i['contraparte'], i['valor'], ''])
             
     else:
         relatorio_div.append(["NENHUMA OPERAÇÃO DIVERGENTE ENCONTRADA"])
@@ -145,7 +150,7 @@ def criar_relatorio_conciliação(
         # Cabeçalho das operações convergentes
         cabecalho = [
             "Data Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
-            "Data Controle", "Descrição Controle", "Valor Controle (R$)"
+            "Data Controle", "Recurso Controle", "Contraparte Controle", "Valor Controle (R$)"
         ]
         relatorio_conv.append(cabecalho)
         
@@ -160,7 +165,8 @@ def criar_relatorio_conciliação(
                 row.get('descricao_extrato', ''),
                 float(row.get('valor_extrato', 0)) if pd.notna(row.get('valor_extrato')) else "",
                 data_controle,
-                row.get('descricao_controle', ''),
+                row.get('recurso_controle', ''),
+                row.get('contraparte_controle', ''),
                 float(row.get('valor_controle', 0)) if pd.notna(row.get('valor_controle')) else "",
             ]
             relatorio_conv.append(linha)
@@ -214,7 +220,6 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
         # 2. Cores
         cor_titulo_conciliado = PatternFill(start_color='5fb7fa', end_color='5fb7fa', fill_type='solid')
         cor_cabecalho_conciliado = PatternFill(start_color='5fb7fa', end_color='5fb7fa', fill_type='solid')
-        cor_linha_par = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
         cor_titulo_divergente = PatternFill(start_color='fc7474', end_color='fc7474', fill_type='solid')
         cor_cabecalho_divergente = PatternFill(start_color='fc7474', end_color='fc7474', fill_type='solid')
         
@@ -234,13 +239,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
         for sheet_name in ['Transações Conciliadas', 'Transações Não Conciliadas']:
             worksheet = workbook[sheet_name]
 
-            # PRIMEIRO: Aplica cor de fundo para linhas pares
-            for i, row in enumerate(worksheet.iter_rows(min_row=1), start=1):
-                if i > 17 and i % 2 == 0:  # Começa após os cabeçalhos
-                    for cell in row:
-                        cell.fill = cor_linha_par
-            
-            # SEGUNDO: Itera por todas as células aplicando formatação
+            # Aplicação da Formatação
             for row in worksheet.iter_rows():
                 for cell in row:
                     # Aplica borda para todas as células
@@ -294,7 +293,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                             
                             # Estilo para cabeçalhos de tabela
                             elif cell.value in ["EXTRATO","CONTROLE FINANCEIRO","Data Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
-                                            "Data Controle", "Descrição Controle", "Valor Controle (R$)"]:
+                                            "Data Controle", "Recurso Controle", "Contraparte Controle", "Valor Controle (R$)", "Crítica"]:
                                 cell.font = fonte_cabecalho
                                 cell.fill = cor_cabecalho_conciliado
                                 cell.alignment = alinhamento_centro
@@ -315,7 +314,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                                 cell.alignment = alinhamento_centro
                             
                             # Estilo para cabeçalhos de tabela
-                            elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Descrição", "Valor (R$)"]:
+                            elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Descrição", "Recurso", "Contraparte", "Valor (R$)", "Crítica"]:
                                 cell.font = fonte_cabecalho
                                 cell.fill = cor_cabecalho_divergente
                                 cell.alignment = alinhamento_centro

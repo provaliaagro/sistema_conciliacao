@@ -15,7 +15,7 @@ def try_login(username, pw):
     # Exemplo simples: checar contra st.secrets["users"]   
     users = st.secrets["users"]
     if username in users:
-        nome_completo, email, senha_cadastrada = users[username]
+        nome_completo, senha_cadastrada = users[username]
         if senha_cadastrada == pw:
             st.session_state.authenticated = True
             st.session_state.nome = nome_completo
