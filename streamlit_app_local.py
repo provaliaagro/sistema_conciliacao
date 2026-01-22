@@ -67,10 +67,13 @@ if st.session_state.df_extrato is None:
                 df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
                 st.session_state['df_controle'] = df_controle
                 df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
+                st.dataframe(df_controle)
                 df_controle.columns = indices_controle
                 df_controle = func.remover_linhas_vazias(df_controle)
                 df_controle = func.remover_linhas_desnecessarias(df_controle, 'recurso')
                 df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
+                st.dataframe(df_controle)
+                st.stop()
                 # Verifica se há valores que não puderam ser convertidos
                 valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
                 if not valores_invalidos.empty:
