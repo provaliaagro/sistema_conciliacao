@@ -4,6 +4,11 @@ from datetime import datetime
 import funcoes_especificas as func
 import conciliacao as c
 
+# Importar Rerun com alias diferente se for usar
+USE_RERUN = False  # Controlar se vai usar Rerun SDK
+if USE_RERUN:
+    import rerun as visualization_rr  # Alias diferente
+
 # ----- Estado inicial (garante chaves) -----
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
