@@ -267,7 +267,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                         
                         
                         # Formatando as demais colunas
-                        if cell.row >= 19 and cell.column_letter in ["B", "C", "F"]:
+                        if cell.row >= 19 and cell.column_letter in ["B", "C", "D", "F"]:
                             cell.number_format = formato_numero
                             
                             if cell.value < 0:
