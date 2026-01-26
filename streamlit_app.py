@@ -41,7 +41,7 @@ st.session_state.df_controle = None
 st.session_state.excel = None
 
 st.title("Sistema CBA | Provalia")
-st.success(f"Bem-vindo(a), {st.session_state["nome"]}!")
+st.success(f"Bem-vindo(a), {st.session_state.nome}!")
 st.markdown("### Saldos Relacionados à conciliação:") 
 saldo_inicial = st.number_input("Informe o saldo inicial (R$):")
 st.session_state.saldo_inicial = saldo_inicial
