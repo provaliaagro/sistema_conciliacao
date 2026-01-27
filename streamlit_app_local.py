@@ -58,38 +58,69 @@ if st.session_state.df_extrato is None:
     # Para fazer upload do controle financeiro
     if st.session_state.df_extrato is not None:
         st.markdown("### Selecione o arquivo do Controle Financeiro") 
-        controle_financeiro = st.file_uploader("Controle Financeiro extraído do sistema Perfarm no formato Excel", type="xlsx")
-        # st.write("### Dados do Controle Financeiro:")
-        # Para fazer o tratamento de dados do controle financeiro
-        if controle_financeiro is not None:
-            try: 
-                indices_controle = ["data", "recurso", "contraparte", "valor"]
-                df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
-                st.session_state['df_controle'] = df_controle
-                df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
-                st.dataframe(df_controle)
-                df_controle.columns = indices_controle
-                df_controle = func.remover_linhas_vazias(df_controle)
-                df_controle = func.remover_linhas_desnecessarias(df_controle, 'recurso')
-                df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
-                st.dataframe(df_controle)
-                st.stop()
-                # Verifica se há valores que não puderam ser convertidos
-                valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
-                if not valores_invalidos.empty:
-                    st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
-                    st.dataframe(valores_invalidos[['valor']])
+        st.session_state.tipo_controle = st.radio(
+            "Selecione o tipo de Controle Financeiro:",
+            ["Controle Financeiro Perfarm", "Controle Financeiro Padrão"]
+        )      
+        
+        if st.session_state.tipo_controle == "Controle Financeiro Perfarm":
+            controle_financeiro = st.file_uploader("Controle Financeiro extraído do sistema Perfarm no formato Excel", type="xlsx")
+            # st.write("### Dados do Controle Financeiro:")
+            # Para fazer o tratamento de dados do controle financeiro
+            if controle_financeiro is not None:
+                try: 
+                    indices_controle = ["data", "recurso", "contraparte", "valor"]
+                    df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
+                    st.session_state['df_controle'] = df_controle
+                    df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
+                    df_controle.columns = indices_controle
+                    df_controle = func.remover_linhas_vazias(df_controle)
+                    df_controle = func.remover_linhas_desnecessarias(df_controle, 'recurso')
+                    df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
+                    # Verifica se há valores que não puderam ser convertidos
+                    valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
+                    if not valores_invalidos.empty:
+                        st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
+                        st.dataframe(valores_invalidos[['valor']])
+                        
+                    # Mostra o dataframe na tela
+                    # st.dataframe(df_controle)
+
+                    # Salvando o controle financeiro no session_state
+                    st.session_state['df_controle'] = df_controle
                     
-                # Mostra o dataframe na tela
-                # st.dataframe(df_controle)
+                except Exception as e:
+                    st.error(f"Erro ao processar arquivo: {e}")
+                    st.stop()
+        elif st.session_state.tipo_controle == "Controle Financeiro Padrão":
+            controle_financeiro = st.file_uploader("Controle Financeiro no formato Excel Padrão", type="xlsx")
+            # st.write("### Dados do Controle Financeiro:")
+            # Para fazer o tratamento de dados do controle financeiro
+            if controle_financeiro is not None:
+                try: 
+                    indices_controle = ["data", "recurso", "contraparte", "valor"]
+                    df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=0)
+                    st.session_state['df_controle'] = df_controle
+                    df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
+                    df_controle.columns = indices_controle
+                    df_controle = func.remover_linhas_vazias(df_controle)
+                    df_controle["valor_convertido"] = df_controle["valor"]
+                    # Verifica se há valores que não puderam ser convertidos
+                    valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
+                    if not valores_invalidos.empty:
+                        st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
+                        st.dataframe(valores_invalidos[['valor']])
+                        
+                    # Mostra o dataframe na tela
+                    # st.dataframe(df_controle)
 
-                # Salvando o controle financeiro no session_state
-                st.session_state['df_controle'] = df_controle
-                
-            except Exception as e:
-                st.error(f"Erro ao processar arquivo: {e}")
-                st.stop()
-
+                    # Salvando o controle financeiro no session_state
+                    st.session_state['df_controle'] = df_controle
+                    
+                except Exception as e:
+                    st.error(f"Erro ao processar arquivo: {e}")
+                    st.stop()
+        
 if st.session_state.df_controle is not None:
     if st.button("Processar Conciliação"):
         barra_progresso = st.progress(0)
