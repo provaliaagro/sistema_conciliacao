@@ -269,8 +269,8 @@ def conciliacao_simples(df_extrato, df_controle):
     """
     
     # Prepara os dataframes
-    df_e = df_extrato[['data', 'descricao', 'valor_convertido']].copy()
-    df_e.columns = ['data_extrato', 'descricao_extrato', 'valor_extrato']
+    df_e = df_extrato[['data', 'documento', 'descricao', 'valor_convertido']].copy()
+    df_e.columns = ['data_extrato', 'documento_extrato', 'descricao_extrato', 'valor_extrato']
     
     df_c = df_controle[['data', 'recurso', 'contraparte', 'valor_convertido']].copy()
     df_c.columns = ['data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle']
@@ -330,7 +330,7 @@ def conciliacao_simples(df_extrato, df_controle):
     
     # 2. Criar dataframe com todas as linhas do extrato (com ou sem match)
     df_result_e = pd.merge(
-        df_e[['_id_extrato', 'data_extrato', 'descricao_extrato', 'valor_extrato']],
+        df_e[['_id_extrato', 'data_extrato', 'documento_extrato', 'descricao_extrato', 'valor_extrato']],
         matches_df,
         on='_id_extrato',
         how='left'
@@ -354,6 +354,7 @@ def conciliacao_simples(df_extrato, df_controle):
         df_controle_sem_match = pd.DataFrame({
             'data_extrato': [None] * len(linhas_controle_nao_usadas),
             'descricao_extrato': [None] * len(linhas_controle_nao_usadas),
+            'documento_extrato': [None] * len(linhas_controle_nao_usadas),
             'valor_extrato': [None] * len(linhas_controle_nao_usadas),
             '_id_extrato': [None] * len(linhas_controle_nao_usadas),
             '_id_controle': linhas_controle_nao_usadas['_id_controle'].values,
@@ -380,7 +381,7 @@ def conciliacao_simples(df_extrato, df_controle):
     
     # Reordenar colunas para melhor visualização
     col_order = [
-        'data_extrato', 'descricao_extrato', 'valor_extrato',
+        'data_extrato', 'documento_extrato', 'descricao_extrato', 'valor_extrato',
         'data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle',
         'status_conciliacao'
     ]

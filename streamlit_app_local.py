@@ -20,9 +20,9 @@ if st.session_state.df_extrato is None:
     # Para fazer o tratamento de dados do extrato
     if extrato is not None:
         try:
-            indices_extrato = ["data", "descricao", "valor"]
+            indices_extrato = ["data", "documento", "descricao", "valor"]
             df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
-            df_extrato = df_extrato[["DATA", "HISTÓRICO", "VALOR"]]
+            df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "VALOR"]]
             df_extrato.columns = indices_extrato
             # Ordena o dataframe
             df_extrato = func.ordernar_arquivo(df_extrato)
