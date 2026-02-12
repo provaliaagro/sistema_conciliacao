@@ -15,46 +15,124 @@ saldo_inicial = st.number_input("Informe o saldo inicial (R$):")
 st.session_state.saldo_inicial = saldo_inicial
 
 if st.session_state.df_extrato is None:
-    st.markdown("### Selecione o arquivo do Extrato Bancário") 
-    extrato = st.file_uploader("Extrato extraído do banco SICOOB no formato Excel", type="xlsx")
-    # Para fazer o tratamento de dados do extrato
-    if extrato is not None:
-        try:
-            indices_extrato = ["data", "documento", "descricao", "valor"]
-            df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
-            df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "VALOR"]]
-            df_extrato.columns = indices_extrato
-            # Ordena o dataframe
-            df_extrato = func.ordernar_arquivo(df_extrato)
-                        
-            st.session_state['df_extrato'] = df_extrato
-
-            # Mostra o dataframe tratado na tela
-            # st.write("### Dados do Extrato:")
-            if "valor" in df_extrato.columns:
-                df_extrato = func.remover_linhas_vazias(df_extrato)
-                df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
-                
-                # Verifica se há valores que não puderam ser convertidos
-                valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
-                if not valores_invalidos.empty:
-                    st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
-                    st.dataframe(valores_invalidos[['valor']])
-                
-                # Mostra o dataframe na tela
-                #st.dataframe(df_extrato)
-                #st.stop()
-                
-                # Salvando o extrato no session_state
+    st.markdown("### Selecione o arquivo do Extrato Bancário")
+    st.session_state.tipo_extrato = st.radio(
+            "Selecione o banco emissor do extrato:",
+            ["SICOOB", "Banco do Brasil", "Extrato Padrão"]
+        )      
+    if st.session_state.tipo_extrato == "SICOOB":
+        extrato = st.file_uploader("Extrato extraído do SICOOB no formato Excel", type="xlsx")
+        # Para fazer o tratamento de dados do extrato
+        if extrato is not None:
+            try:
+                indices_extrato = ["data", "documento", "descricao", "valor"]
+                df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
+                df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "VALOR"]]
+                df_extrato.columns = indices_extrato
+                # Ordena o dataframe
+                df_extrato = func.ordernar_arquivo(df_extrato)
+                            
                 st.session_state['df_extrato'] = df_extrato
-                
-            else:
-                st.error("Coluna 'valor' não encontrada no arquivo!")
-                st.stop()
+
+                # Mostra o dataframe tratado na tela
+                # st.write("### Dados do Extrato:")
+                if "valor" in df_extrato.columns:
+                    df_extrato = func.remover_linhas_vazias(df_extrato)
+                    df_extrato = func.remover_linhas_desnecessarias(df_extrato)
+                    df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
                     
-        except Exception as e:
-            st.error(f"Erro ao processar arquivo: {e}")
+                    # Verifica se há valores que não puderam ser convertidos
+                    valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
+                    if not valores_invalidos.empty:
+                        st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
+                        st.dataframe(valores_invalidos[['valor']])
+                    
+                    # Mostra o dataframe na tela
+                    #st.dataframe(df_extrato)
+                    #st.stop()
+                    
+                    # Salvando o extrato no session_state
+                    st.session_state['df_extrato'] = df_extrato
+                    
+                else:
+                    st.error("Coluna 'valor' não encontrada no arquivo!")
+                    st.stop()
+                        
+            except Exception as e:
+                st.error(f"Erro ao processar arquivo: {e}")
+    elif st.session_state.tipo_extrato == "Banco do Brasil":
+        extrato = st.file_uploader("Extrato extraído do Banco do Brasil no formato Excel", type="xlsx")
+        # Para fazer o tratamento de dados do extrato
+        if extrato is not None:
+            try:
+                indices_extrato = ["data", "documento", "descricao", "valor"]
+                df_extrato = pd.read_excel(extrato, engine="openpyxl", header=0)
+                df_extrato = df_extrato[["Data", "N° documento", "Lançamento", "Valor"]]
+                df_extrato.columns = indices_extrato
+                # Ordena o dataframe
+                df_extrato = func.ordernar_arquivo(df_extrato)
+                            
+                st.session_state['df_extrato'] = df_extrato
+
+                # Mostra o dataframe tratado na tela
+                # st.write("### Dados do Extrato:")
+                if "valor" in df_extrato.columns:
+                    df_extrato = func.remover_linhas_vazias(df_extrato)
+                    df_extrato = func.remover_linhas_desnecessarias(df_extrato)
+                    
+                    # Mostra o dataframe na tela
+                    #st.dataframe(df_extrato)
+                    #st.stop()
+                    
+                    # Salvando o extrato no session_state
+                    st.session_state['df_extrato'] = df_extrato
+                    
+                else:
+                    st.error("Coluna 'valor' não encontrada no arquivo!")
+                    st.stop()
+                        
+            except Exception as e:
+                st.error(f"Erro ao processar arquivo: {e}")
+    elif st.session_state.tipo_extrato == "Extrato Padrão":
+        extrato = st.file_uploader("Extrato no formato Excel padrão", type="xlsx")
+        # Para fazer o tratamento de dados do extrato
+        if extrato is not None:
+            try:
+                indices_extrato = ["data", "documento", "descricao", "valor"]
+                df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
+                df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "VALOR"]]
+                df_extrato.columns = indices_extrato
+                # Ordena o dataframe
+                df_extrato = func.ordernar_arquivo(df_extrato)
+                            
+                st.session_state['df_extrato'] = df_extrato
+
+                # Mostra o dataframe tratado na tela
+                # st.write("### Dados do Extrato:")
+                if "valor" in df_extrato.columns:
+                    df_extrato = func.remover_linhas_vazias(df_extrato)
+                    df_extrato = func.remover_linhas_desnecessarias(df_extrato)
+                    df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
+                    
+                    # Verifica se há valores que não puderam ser convertidos
+                    valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
+                    if not valores_invalidos.empty:
+                        st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
+                        st.dataframe(valores_invalidos[['valor']])
+                    
+                    # Mostra o dataframe na tela
+                    #st.dataframe(df_extrato)
+                    #st.stop()
+                    
+                    # Salvando o extrato no session_state
+                    st.session_state['df_extrato'] = df_extrato
+                    
+                else:
+                    st.error("Coluna 'valor' não encontrada no arquivo!")
+                    st.stop()
+                        
+            except Exception as e:
+                st.error(f"Erro ao processar arquivo: {e}")
     # Para fazer upload do controle financeiro
     if st.session_state.df_extrato is not None:
         st.markdown("### Selecione o arquivo do Controle Financeiro") 
@@ -65,7 +143,6 @@ if st.session_state.df_extrato is None:
         
         if st.session_state.tipo_controle == "Controle Financeiro Perfarm":
             controle_financeiro = st.file_uploader("Controle Financeiro extraído do sistema Perfarm no formato Excel", type="xlsx")
-            # st.write("### Dados do Controle Financeiro:")
             # Para fazer o tratamento de dados do controle financeiro
             if controle_financeiro is not None:
                 try: 

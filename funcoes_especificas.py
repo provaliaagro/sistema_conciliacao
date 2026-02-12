@@ -153,7 +153,7 @@ def remover_linhas_desnecessarias(df, coluna_descricao='descricao', palavras_rem
     """
     if palavras_remover is None:
         palavras_remover = [
-            'SALDO BLOQUEADO ANTERIOR', 'A Perfarm', 'SALDO DO DIA', 'SALDO ANTERIOR' ]
+            'SALDO BLOQUEADO ANTERIOR', 'A Perfarm', 'SALDO DO DIA', 'SALDO ANTERIOR', 'S A L D O' ]
     
     # Converte tudo para maiúsculo para busca case-insensitive
     descricao_upper = df[coluna_descricao].astype(str).str.upper()
