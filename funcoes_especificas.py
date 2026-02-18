@@ -229,7 +229,7 @@ def converter_valor_reais(valor_str):
     except (ValueError, AttributeError, TypeError):
         return None
 
-def contar_movimentacoes(df, coluna_valor='valor_convertido'):
+def contar_movimentacoes(df, coluna_valor='valor_convertido'):  
     """
     Conta movimentações, entradas e saídas excluindo linhas com descrição igual a 'SALDO' e derivadas disso
     
@@ -251,14 +251,11 @@ def contar_movimentacoes(df, coluna_valor='valor_convertido'):
     else:
         entradas = saidas = 0
         
-    #total_valor = sum(total_valor)
-    total_alternativo = 0
+    soma_total = 0
     for i in total_valor:
-        total_alternativo += i
-    st.write(total_alternativo)
-    st.stop()
+        soma_total += i
     
-    return total_movimentacoes, entradas, saidas, total_valor
+    return total_movimentacoes, entradas, saidas, soma_total
 
 def conciliacao_simples(df_extrato, df_controle):
     """
