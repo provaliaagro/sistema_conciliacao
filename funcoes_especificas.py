@@ -236,7 +236,7 @@ def contar_movimentacoes(df, coluna_valor='valor_convertido'):
     Returns:
         tuple: (total_movimentacoes, total_entradas, total_saidas)
     """
-    # Filtra linhas sem 'SALDO'
+    
     df_movimentacoes = df
     
     # Conta totais
@@ -251,7 +251,12 @@ def contar_movimentacoes(df, coluna_valor='valor_convertido'):
     else:
         entradas = saidas = 0
         
-    total_valor = sum(total_valor)
+    #total_valor = sum(total_valor)
+    total_alternativo = 0
+    for i in total_valor:
+        total_alternativo += i
+    st.write(total_alternativo)
+    st.stop()
     
     return total_movimentacoes, entradas, saidas, total_valor
 

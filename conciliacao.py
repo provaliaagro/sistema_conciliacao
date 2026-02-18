@@ -11,6 +11,12 @@ def conciliacao(ex, cf, si):
     
     # Quantidade de movimentações
     mov_extrato, entradas_extrato, saidas_extrato, total_extrato = func.contar_movimentacoes(ex)
+    st.dataframe(ex)
+    total = 0
+    total += ex["valor_convertido"]
+    st.write(f"Total{total}")
+    
+    st.stop()
     
     st.session_state.saldo_final_ex = si + total_extrato
     

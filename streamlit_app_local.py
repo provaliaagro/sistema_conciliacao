@@ -73,17 +73,16 @@ if st.session_state.df_extrato is None:
                 df_extrato = func.ordernar_arquivo(df_extrato)
                             
                 st.session_state['df_extrato'] = df_extrato
-
-                # Mostra o dataframe tratado na tela
+                
+                
                 # st.write("### Dados do Extrato:")
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                    
-                    # Mostra o dataframe na tela
-                    #st.dataframe(df_extrato)
-                    #st.stop()
-                    
+                    df_extrato["valor_convertido"] = pd.to_numeric(
+                        df_extrato["valor"].str.replace('.', '').str.replace(',','.'),
+                        errors = 'coerce'
+                    )                    
                     # Salvando o extrato no session_state
                     st.session_state['df_extrato'] = df_extrato
                     
