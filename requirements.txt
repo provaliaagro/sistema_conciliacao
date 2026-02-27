@@ -4,3 +4,4 @@ numpy
 python-dateutil
 streamlit
 altair~=4.2.0
+pyarrow<12.0.0
