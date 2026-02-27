@@ -62,7 +62,7 @@ if st.session_state.df_extrato is None:
             df_extrato.columns = indices_extrato
             
             df_extrato = func.ordernar_arquivo(df_extrato)
-                        
+            df_extrato = df_extrato.astype(object)
             st.session_state['df_extrato'] = df_extrato
 
             # Mostra o dataframe tratado na tela
@@ -106,6 +106,7 @@ if st.session_state.df_extrato is None:
                 try: 
                     indices_controle = ["data", "recurso", "contraparte", "valor"]
                     df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
+                    df_controle = df_extrato.astype(object)
                     st.session_state['df_controle'] = df_controle
                     df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
                     df_controle.columns = indices_controle
