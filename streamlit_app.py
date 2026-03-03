@@ -106,7 +106,6 @@ if st.session_state.df_extrato is None:
                 try: 
                     indices_controle = ["data", "recurso", "contraparte", "valor"]
                     df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
-                    df_controle = df_extrato.astype(object)
                     st.session_state['df_controle'] = df_controle
                     df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
                     df_controle.columns = indices_controle
@@ -137,8 +136,6 @@ if st.session_state.df_extrato is None:
                     indices_controle = ["data", "recurso", "contraparte", "valor"]
                     df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=0)
                     st.session_state['df_controle'] = df_controle
-                    st.dataframe(df_controle)
-                    st.stop()
                     df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
                     df_controle.columns = indices_controle
                     df_controle = func.remover_linhas_vazias(df_controle)
