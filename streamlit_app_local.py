@@ -143,7 +143,7 @@ if st.session_state.df_extrato is None:
             # Para fazer o tratamento de dados do controle financeiro
             if controle_financeiro is not None:
                 try: 
-                    indices_controle = ["data", "recurso", "contraparte", "plano de contas", "valor"]
+                    indices_controle = ["data", "descricao", "contraparte", "plano de contas", "valor"]
                     df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
                     st.session_state['df_controle'] = df_controle
                     df_controle = df_controle[["Data", "Recurso", "Contraparte", "Plano de Contas", "Valor"]]
