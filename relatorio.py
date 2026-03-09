@@ -67,7 +67,7 @@ def criar_relatorio_conciliação(
         ]
         
         cabecalho_controle = [
-            "Data", "Recurso", "Contraparte", "Plano de Contas", "Valor (R$)", "Crítica"
+            "Data", "Descrição", "Contraparte", "Plano de Contas", "Valor (R$)", "Crítica"
         ]
         
         # Adiciona dados que tem no extrato e não estão no controle financeiro
@@ -152,7 +152,7 @@ def criar_relatorio_conciliação(
         # Cabeçalho das operações convergentes
         cabecalho = [
             "Data Extrato", "Documento Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
-            "Data Controle", "Recurso Controle", "Contraparte Controle", "Plano de Contas Controle", "Valor Controle (R$)"
+            "Data Controle", "Descrição Controle", "Contraparte Controle", "Plano de Contas Controle", "Valor Controle (R$)"
         ]
         relatorio_conv.append(cabecalho)
         
