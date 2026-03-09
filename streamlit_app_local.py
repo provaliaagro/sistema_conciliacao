@@ -149,7 +149,7 @@ if st.session_state.df_extrato is None:
                     df_controle = df_controle[["Data", "Recurso", "Contraparte", "Plano de Contas", "Valor"]]
                     df_controle.columns = indices_controle
                     df_controle = func.remover_linhas_vazias(df_controle)
-                    df_controle = func.remover_linhas_desnecessarias(df_controle, 'recurso')
+                    df_controle = func.remover_linhas_desnecessarias(df_controle, 'descricao')
                     df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
                     # Verifica se há valores que não puderam ser convertidos
                     valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
