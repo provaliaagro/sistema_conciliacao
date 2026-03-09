@@ -67,7 +67,7 @@ def criar_relatorio_conciliação(
         ]
         
         cabecalho_controle = [
-            "Data", "Recurso", "Contraparte", "Valor (R$)", "Crítica"
+            "Data", "Recurso", "Contraparte", "Plano de Contas", "Valor (R$)", "Crítica"
         ]
         
         # Adiciona dados que tem no extrato e não estão no controle financeiro
@@ -116,6 +116,7 @@ def criar_relatorio_conciliação(
                 'data': data_controle,
                 'recurso': row.get('recurso_controle', ''),
                 'contraparte': row.get('contraparte_controle', ''),
+                'plano de contas': row.get('plano de contas_controle'),
                 'valor': float(row.get('valor_controle', 0)) if pd.notna(row.get('valor_controle')) else "vazio"
             }
             if linha['valor'] != "vazio":
@@ -151,7 +152,7 @@ def criar_relatorio_conciliação(
         # Cabeçalho das operações convergentes
         cabecalho = [
             "Data Extrato", "Documento Extrato", "Descrição Extrato", "Valor Extrato (R$)", 
-            "Data Controle", "Recurso Controle", "Contraparte Controle", "Valor Controle (R$)"
+            "Data Controle", "Recurso Controle", "Contraparte Controle", "Plano de Contas Controle", "Valor Controle (R$)"
         ]
         relatorio_conv.append(cabecalho)
         
@@ -169,6 +170,7 @@ def criar_relatorio_conciliação(
                 data_controle,
                 row.get('recurso_controle', ''),
                 row.get('contraparte_controle', ''),
+                row.get('plano de contas_controle'),
                 float(row.get('valor_controle', 0)) if pd.notna(row.get('valor_controle')) else "",
             ]
             relatorio_conv.append(linha)
@@ -269,7 +271,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                         
                         
                         # Formatando as demais colunas
-                        if cell.row >= 19 and cell.column_letter in ["B", "C", "D", "H"]:
+                        if cell.row >= 19 and cell.column_letter in ["B", "C", "D", "I"]:
                             cell.number_format = formato_numero
                             
                             if cell.value < 0:
@@ -295,7 +297,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                             
                             # Estilo para cabeçalhos de tabela
                             elif cell.value in ["EXTRATO","CONTROLE FINANCEIRO","Data Extrato", "Descrição Extrato", "Documento Extrato", "Valor Extrato (R$)", 
-                                            "Data Controle", "Recurso Controle", "Contraparte Controle", "Valor Controle (R$)", "Crítica"]:
+                                            "Data Controle", "Descrição Controle", "Contraparte Controle", "Plano de Contas Controle", "Valor Controle (R$)", "Crítica"]:
                                 cell.font = fonte_cabecalho
                                 cell.fill = cor_cabecalho_conciliado
                                 cell.alignment = alinhamento_centro
@@ -316,7 +318,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                                 cell.alignment = alinhamento_centro
                             
                             # Estilo para cabeçalhos de tabela
-                            elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Documento", "Descrição", "Recurso", "Contraparte", "Valor (R$)", "Crítica"]:
+                            elif cell.value in ["EXTRATO", "CONTROLE FINANCEIRO", "Data", "Documento", "Descrição", "Contraparte", "Plano de Contas", "Valor (R$)", "Crítica"]:
                                 cell.font = fonte_cabecalho
                                 cell.fill = cor_cabecalho_divergente
                                 cell.alignment = alinhamento_centro

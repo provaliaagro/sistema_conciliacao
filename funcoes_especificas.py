@@ -274,8 +274,8 @@ def conciliacao_simples(df_extrato, df_controle):
     df_e = df_extrato[['data', 'documento', 'descricao', 'valor_convertido']].copy()
     df_e.columns = ['data_extrato', 'documento_extrato', 'descricao_extrato', 'valor_extrato']
     
-    df_c = df_controle[['data', 'recurso', 'contraparte', 'valor_convertido']].copy()
-    df_c.columns = ['data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle']
+    df_c = df_controle[['data', 'descricao', 'contraparte', 'plano de contas', 'valor_convertido']].copy()
+    df_c.columns = ['data_controle', 'recurso_controle', 'contraparte_controle', 'plano de contas_controle', 'valor_controle']
     
     # Resetar índices para IDs únicos
     df_e = df_e.reset_index(drop=True).reset_index().rename(columns={'index': '_id_extrato'})
@@ -341,7 +341,7 @@ def conciliacao_simples(df_extrato, df_controle):
     # 3. Adicionar dados do controle para as que têm match
     df_result = pd.merge(
         df_result_e,
-        df_c[['_id_controle', 'data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle']],
+        df_c[['_id_controle', 'data_controle', 'recurso_controle', 'contraparte_controle', 'plano de contas_controle', 'valor_controle']],
         on='_id_controle',
         how='left'
     )
@@ -363,6 +363,7 @@ def conciliacao_simples(df_extrato, df_controle):
             'data_controle': linhas_controle_nao_usadas['data_controle'].values,
             'recurso_controle': linhas_controle_nao_usadas['recurso_controle'].values,
             'contraparte_controle': linhas_controle_nao_usadas['contraparte_controle'].values,
+            'plano de contas_controle': linhas_controle_nao_usadas['plano de contas_controle'].values,
             'valor_controle': linhas_controle_nao_usadas['valor_controle'].values
         })
         
@@ -384,7 +385,7 @@ def conciliacao_simples(df_extrato, df_controle):
     # Reordenar colunas para melhor visualização
     col_order = [
         'data_extrato', 'documento_extrato', 'descricao_extrato', 'valor_extrato',
-        'data_controle', 'recurso_controle', 'contraparte_controle', 'valor_controle',
+        'data_controle', 'recurso_controle', 'contraparte_controle', 'plano de contas_controle', 'valor_controle',
         'status_conciliacao'
     ]
     

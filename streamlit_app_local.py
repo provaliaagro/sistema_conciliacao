@@ -39,18 +39,19 @@ if st.session_state.df_extrato is None:
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
+                    st.dataframe(df_extrato)
                     df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
+                    st.dataframe(df_extrato)
                     
                     # Verifica se há valores que não puderam ser convertidos
                     valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
                     if not valores_invalidos.empty:
-                        st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
-                        st.dataframe(valores_invalidos[['valor']])
+                        # st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
+                        #st.dataframe(valores_invalidos[['valor']])
+                        df_extrato = df_extrato.dropna(subset=['valor_convertido'])
                     
-                    # Mostra o dataframe na tela
-                    #st.dataframe(df_extrato)
-                    #st.stop()
-                    
+                    st.dataframe(df_extrato)
+                    st.stop()
                     # Salvando o extrato no session_state
                     st.session_state['df_extrato'] = df_extrato
                     
@@ -67,11 +68,15 @@ if st.session_state.df_extrato is None:
             try:
                 indices_extrato = ["data", "documento", "descricao", "valor"]
                 df_extrato = pd.read_excel(extrato, engine="openpyxl", header=0)
+                df_extrato = df_extrato[["Data", "N° documento", "Lançamento", "Detalhes", "Valor"]]
+                df_extrato["Lançamento"] = df_extrato["Lançamento"].fillna('--') + " | " + df_extrato["Detalhes"].fillna('--')
                 df_extrato = df_extrato[["Data", "N° documento", "Lançamento", "Valor"]]
                 df_extrato.columns = indices_extrato
                 # Ordena o dataframe
                 df_extrato = func.ordernar_arquivo(df_extrato)
-                            
+
+                st.dataframe(df_extrato)
+                st.stop()                            
                 st.session_state['df_extrato'] = df_extrato
                 
                 
@@ -98,8 +103,10 @@ if st.session_state.df_extrato is None:
         if extrato is not None:
             try:
                 indices_extrato = ["data", "documento", "descricao", "valor"]
-                df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
-                df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "VALOR"]]
+                df_extrato = pd.read_excel(extrato, engine="openpyxl", header=0)
+                df_extrato = df_extrato[["DATA", "DOCUMENTO", "DESCRIÇÃO", "INFORMAÇÕES ADICIONAIS", "VALOR"]]
+                df_extrato["DESCRIÇÃO"] = df_extrato["DESCRIÇÃO"].fillna('--') + ' | ' + df_extrato["INFORMAÇÕES ADICIONAIS"].fillna('--')
+                df_extrato = df_extrato[["DATA", "DOCUMENTO", "DESCRIÇÃO", "VALOR"]]
                 df_extrato.columns = indices_extrato
                 # Ordena o dataframe
                 df_extrato = func.ordernar_arquivo(df_extrato)
@@ -111,17 +118,8 @@ if st.session_state.df_extrato is None:
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                    df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
+                    df_extrato["valor_convertido"] = df_extrato["valor"]             
                     
-                    # Verifica se há valores que não puderam ser convertidos
-                    valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
-                    if not valores_invalidos.empty:
-                        st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
-                        st.dataframe(valores_invalidos[['valor']])
-                    
-                    # Mostra o dataframe na tela
-                    #st.dataframe(df_extrato)
-                    #st.stop()
                     
                     # Salvando o extrato no session_state
                     st.session_state['df_extrato'] = df_extrato
@@ -145,10 +143,10 @@ if st.session_state.df_extrato is None:
             # Para fazer o tratamento de dados do controle financeiro
             if controle_financeiro is not None:
                 try: 
-                    indices_controle = ["data", "recurso", "contraparte", "valor"]
+                    indices_controle = ["data", "recurso", "contraparte", "plano de contas", "valor"]
                     df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=5)
                     st.session_state['df_controle'] = df_controle
-                    df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
+                    df_controle = df_controle[["Data", "Recurso", "Contraparte", "Plano de Contas", "Valor"]]
                     df_controle.columns = indices_controle
                     df_controle = func.remover_linhas_vazias(df_controle)
                     df_controle = func.remover_linhas_desnecessarias(df_controle, 'recurso')
@@ -159,9 +157,6 @@ if st.session_state.df_extrato is None:
                         st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
                         st.dataframe(valores_invalidos[['valor']])
                         
-                    # Mostra o dataframe na tela
-                    # st.dataframe(df_controle)
-
                     # Salvando o controle financeiro no session_state
                     st.session_state['df_controle'] = df_controle
                     
@@ -174,10 +169,10 @@ if st.session_state.df_extrato is None:
             # Para fazer o tratamento de dados do controle financeiro
             if controle_financeiro is not None:
                 try: 
-                    indices_controle = ["data", "recurso", "contraparte", "valor"]
+                    indices_controle = ["data", "descricao", "contraparte", "plano de contas", "valor"]
                     df_controle = pd.read_excel(controle_financeiro, engine="openpyxl", header=0)
                     st.session_state['df_controle'] = df_controle
-                    df_controle = df_controle[["Data", "Recurso", "Contraparte", "Valor"]]
+                    df_controle = df_controle[["Data", "Descrição", "Contraparte", "Plano de Contas", "Valor"]]
                     df_controle.columns = indices_controle
                     df_controle = func.remover_linhas_vazias(df_controle)
                     df_controle["valor_convertido"] = df_controle["valor"]
@@ -186,9 +181,6 @@ if st.session_state.df_extrato is None:
                     if not valores_invalidos.empty:
                         st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
                         st.dataframe(valores_invalidos[['valor']])
-                        
-                    # Mostra o dataframe na tela
-                    # st.dataframe(df_controle)
 
                     # Salvando o controle financeiro no session_state
                     st.session_state['df_controle'] = df_controle
