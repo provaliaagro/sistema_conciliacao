@@ -1,3 +1,4 @@
+from numpy import dtype
 import streamlit as st
 import pandas as pd
 
@@ -234,28 +235,26 @@ def contar_movimentacoes(df, coluna_valor='valor_convertido'):
     Conta movimentações, entradas e saídas excluindo linhas com descrição igual a 'SALDO' e derivadas disso
     
     Returns:
-        tuple: (total_movimentacoes, total_entradas, total_saidas)
+        tuple: (total_movimentacoes, soma_total)
     """
     
     df_movimentacoes = df
-    
+    df_movimentacoes = st.session_state.df_controle
     # Conta totais
     total_movimentacoes = len(df_movimentacoes)
     
     total_valor = 0
     # Conta entradas (valores positivos) e saídas (valores negativos)
     if coluna_valor in df_movimentacoes.columns:
-        entradas = len(df_movimentacoes[df_movimentacoes[coluna_valor] > 0])
-        saidas = len(df_movimentacoes[df_movimentacoes[coluna_valor] < 0])
+        #entradas = len(df_movimentacoes[df_movimentacoes[coluna_valor] > 0])
+        #saidas = len(df_movimentacoes[df_movimentacoes[coluna_valor] < 0])
         total_valor += df_movimentacoes[coluna_valor]
-    else:
-        entradas = saidas = 0
-        
+
     soma_total = 0
     for i in total_valor:
         soma_total += i
-    
-    return total_movimentacoes, entradas, saidas, soma_total
+
+    return total_movimentacoes, soma_total
 
 def conciliacao_simples(df_extrato, df_controle):
     """

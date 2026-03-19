@@ -10,11 +10,11 @@ def conciliacao(ex, cf, si):
     #st.dataframe(cf)
     
     # Quantidade de movimentações
-    mov_extrato, entradas_extrato, saidas_extrato, total_extrato = func.contar_movimentacoes(ex)
+    mov_extrato, total_extrato = func.contar_movimentacoes(ex)
     
     st.session_state.saldo_final_ex = si + total_extrato
     
-    mov_controle, entradas_controle, saidas_controle, total_controle = func.contar_movimentacoes(cf)
+    mov_controle, total_controle = func.contar_movimentacoes(cf)
     
     st.session_state.saldo_final_cf = si + total_controle
     

@@ -41,6 +41,7 @@ if st.session_state.df_extrato is None:
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
                     st.dataframe(df_extrato)
                     df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
+                    df_extrato['valor_convertido'] = pd.to_numeric(df_extrato['valor_convertido'], errors='coerce')
                     st.dataframe(df_extrato)
                     
                     # Verifica se há valores que não puderam ser convertidos
@@ -80,7 +81,6 @@ if st.session_state.df_extrato is None:
                 st.session_state['df_extrato'] = df_extrato
                 
                 
-                # st.write("### Dados do Extrato:")
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
@@ -118,7 +118,14 @@ if st.session_state.df_extrato is None:
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                    df_extrato["valor_convertido"] = df_extrato["valor"]             
+                    df_extrato["valor_convertido"] = df_extrato["valor"]
+                    df_extrato['valor_convertido'] = pd.to_numeric(df_extrato['valor_convertido'], errors='coerce')
+                    
+                    # Verifica se há valores que não puderam ser convertidos
+                    valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
+                    if not valores_invalidos.empty:
+                        # st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
+                        df_extrato = df_extrato.dropna(subset=['valor_convertido']) 
                     
                     
                     # Salvando o extrato no session_state
@@ -150,7 +157,7 @@ if st.session_state.df_extrato is None:
                     df_controle.columns = indices_controle
                     df_controle = func.remover_linhas_vazias(df_controle)
                     df_controle = func.remover_linhas_desnecessarias(df_controle, 'descricao')
-                    df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
+                    df_controle["valor_convertido"] = df_controle["valor"]
                     # Verifica se há valores que não puderam ser convertidos
                     valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
                     if not valores_invalidos.empty:
@@ -176,11 +183,6 @@ if st.session_state.df_extrato is None:
                     df_controle.columns = indices_controle
                     df_controle = func.remover_linhas_vazias(df_controle)
                     df_controle["valor_convertido"] = df_controle["valor"]
-                    # Verifica se há valores que não puderam ser convertidos
-                    valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
-                    if not valores_invalidos.empty:
-                        st.warning(f"DataFrame com {len(valores_invalidos)} de valores não puderam ser convertidos")
-                        st.dataframe(valores_invalidos[['valor']])
 
                     # Salvando o controle financeiro no session_state
                     st.session_state['df_controle'] = df_controle

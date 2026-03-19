@@ -134,7 +134,7 @@ def criar_relatorio_conciliação(
         relatorio_div.append(cabecalho_controle)
         
         for i in controle_divergente:
-                relatorio_div.append([i['data'], i['recurso'], i['contraparte'], i['valor'], ''])
+                relatorio_div.append([i['data'], i['recurso'], i['contraparte'], i['plano de contas'], i['valor'], ''])
             
     else:
         relatorio_div.append(["NENHUMA OPERAÇÃO DIVERGENTE ENCONTRADA"])
@@ -271,7 +271,7 @@ def exportar_relatorio_excel(df_relatorio_conv, df_relatorio_div):
                         
                         
                         # Formatando as demais colunas
-                        if cell.row >= 19 and cell.column_letter in ["B", "C", "D", "I"]:
+                        if cell.row >= 19 and cell.column_letter in ["B", "C", "D", "E", "I"]:
                             cell.number_format = formato_numero
                             
                             if cell.value < 0:
