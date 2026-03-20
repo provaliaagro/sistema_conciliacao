@@ -239,21 +239,18 @@ def contar_movimentacoes(df, coluna_valor='valor_convertido'):
     """
     
     df_movimentacoes = df
-    df_movimentacoes = st.session_state.df_controle
+
     # Conta totais
     total_movimentacoes = len(df_movimentacoes)
     
-    total_valor = 0
     # Conta entradas (valores positivos) e saídas (valores negativos)
     if coluna_valor in df_movimentacoes.columns:
         #entradas = len(df_movimentacoes[df_movimentacoes[coluna_valor] > 0])
         #saidas = len(df_movimentacoes[df_movimentacoes[coluna_valor] < 0])
-        total_valor += df_movimentacoes[coluna_valor]
+        total_valor = df_movimentacoes[coluna_valor]
 
-    soma_total = 0
-    for i in total_valor:
-        soma_total += i
-
+    soma_total = total_valor.sum()
+    
     return total_movimentacoes, soma_total
 
 def conciliacao_simples(df_extrato, df_controle):

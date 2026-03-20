@@ -153,7 +153,7 @@ if st.session_state.df_extrato is None:
                     df_controle.columns = indices_controle
                     df_controle = func.remover_linhas_vazias(df_controle)
                     df_controle = func.remover_linhas_desnecessarias(df_controle, 'descricao')
-                    df_controle["valor_convertido"] = df_controle["valor"]
+                    df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
                         
                     # Salvando o controle financeiro no session_state
                     st.session_state['df_controle'] = df_controle
