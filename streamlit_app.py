@@ -124,7 +124,7 @@ if st.session_state.df_extrato is None:
                     df_extrato["valor_convertido"] = df_extrato["valor"].astype(str).str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
                     df_extrato["valor_convertido"] = pd.to_numeric(df_extrato["valor_convertido"], errors="coerce")
                     
-                
+                    df_extrato["soma"] = df_extrato["valor_convertido"] * 2
                     st.write(df_extrato.head())
                     st.stop()
                     # Salvando o extrato no sistema
