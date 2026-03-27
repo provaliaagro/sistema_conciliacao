@@ -113,7 +113,8 @@ if st.session_state.df_extrato is None:
                 df_extrato = df_extrato[["Data", "N° documento", "Lançamento", "Valor"]]
                 df_extrato.columns = indices_extrato
                 #df_extrato = func.ordernar_arquivo(df_extrato)
-                st.dataframe(df_extrato)
+                st.write(df_extrato.head())
+                st.stop()
                 st.session_state['df_extrato'] = df_extrato # Salvando a primeira versão no sistema
                 
                 # Tratamento dos dados
