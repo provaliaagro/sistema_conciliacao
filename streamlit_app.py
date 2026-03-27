@@ -112,7 +112,7 @@ if st.session_state.df_extrato is None:
                 df_extrato["Lançamento"] = df_extrato["Lançamento"].fillna('--') + " | " + df_extrato["Detalhes"].fillna('--')
                 df_extrato = df_extrato[["Data", "N° documento", "Lançamento", "Valor"]]
                 df_extrato.columns = indices_extrato
-                df_extrato = func.ordernar_arquivo(df_extrato)
+                #df_extrato = func.ordernar_arquivo(df_extrato)
                 st.dataframe(df_extrato)
                 st.session_state['df_extrato'] = df_extrato # Salvando a primeira versão no sistema
                 
