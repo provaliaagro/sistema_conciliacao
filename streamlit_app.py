@@ -123,6 +123,8 @@ if st.session_state.df_extrato is None:
 
                     # Validação da Conversão dos valores
                     valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
+                    st.write(valores_invalidos)
+                    st.stop()
                     if not valores_invalidos.empty:
                         df_extrato = df_extrato.dropna(subset=['valor_convertido'])
                     
