@@ -119,9 +119,12 @@ if st.session_state.df_extrato is None:
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                    df_extrato["valor_convertido"] = pd.to_numeric(df_extrato['valor'])
-                    df_extrato["soma"] = df_extrato["valor_convertido"] * 2
                     
+                    # Conversão do Valor para Número
+                    df_extrato["valor_convertido"] = df_extrato["valor"].astype(str).str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
+                    df_extrato["valor_convertido"] = pd.to_numeric(df_extrato["valor_convertido"], errors="coerce")
+                    
+                
                     st.write(df_extrato.head())
                     st.stop()
                     # Salvando o extrato no sistema
