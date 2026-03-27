@@ -120,6 +120,7 @@ if st.session_state.df_extrato is None:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
                     df_extrato["valor_convertido"] = df_extrato['valor']
+                    df_extrato["soma"] = df_extrato["valor_convertido"] * 2
                     
                     st.write(df_extrato.head())
                     st.stop()
