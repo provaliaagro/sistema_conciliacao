@@ -119,14 +119,7 @@ if st.session_state.df_extrato is None:
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                    df_extrato["valor_convertido"] = pd.to_numeric(df_extrato["valor"], errors = 'coerce')                    
-
-                    # Validação da Conversão dos valores
-                    valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
-                    st.write(valores_invalidos)
-                    st.stop()
-                    if not valores_invalidos.empty:
-                        df_extrato = df_extrato.dropna(subset=['valor_convertido'])
+                    df_extrato["valor_convertido"] = df_extrato['valor']
                     
                     st.write(df_extrato.head())
                     st.stop()
