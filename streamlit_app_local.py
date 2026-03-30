@@ -89,9 +89,7 @@ if st.session_state.df_extrato is None:
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
                     
                     # Conversão do Valor para Número
-                    df_extrato["valor_convertido"] = df_extrato["valor"].astype(str).str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
-                    df_extrato["valor_convertido"] = df_extrato["valor_convertido"].str.replace(',', '.')
-                    df_extrato["valor_convertido"] = pd.to_numeric(df_extrato["valor_convertido"], errors="coerce")
+                    df_extrato["valor_convertido"] = df_extrato["valor"]
                     
                     # Salvando o extrato no sistema
                     st.session_state['df_extrato'] = df_extrato
