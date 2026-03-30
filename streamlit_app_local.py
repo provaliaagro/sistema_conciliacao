@@ -90,6 +90,7 @@ if st.session_state.df_extrato is None:
                     
                     # Conversão do Valor para Número
                     df_extrato["valor_convertido"] = df_extrato["valor"].astype(str).str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
+                    f_extrato["valor_convertido"] = df_extrato["valor_convertido"].str.replace(',', '.')
                     df_extrato["valor_convertido"] = pd.to_numeric(df_extrato["valor_convertido"], errors="coerce")
                     
                     # Salvando o extrato no sistema
