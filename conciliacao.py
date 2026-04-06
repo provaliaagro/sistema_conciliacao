@@ -11,7 +11,6 @@ def conciliacao(ex, cf, si):
     
     # Quantidade de movimentações
     mov_extrato, total_extrato = func.contar_movimentacoes(ex)
-    st.write(total_extrato)
     
     st.session_state.saldo_final_ex = si + total_extrato
     
