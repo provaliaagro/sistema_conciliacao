@@ -72,6 +72,7 @@ if st.session_state.df_extrato is None:
                 df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
                 df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "VALOR"]]
                 df_extrato.columns = indices_extrato
+                df_extrato = func.agrupar_linhas_extrato(df_extrato)
                 df_extrato = func.ordernar_arquivo(df_extrato)
                 df_extrato = df_extrato.astype(object)
                 st.session_state['df_extrato'] = df_extrato # Salvando a primeira versão no sistema

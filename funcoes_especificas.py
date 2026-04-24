@@ -173,6 +173,43 @@ def remover_linhas_desnecessarias(df, coluna_descricao='descricao', palavras_rem
     
     return df_filtrado
 
+def agrupar_linhas_extrato(df):
+    linhas_agrupadas = []
+    buffer_descricao = ""
+
+    for _, row in df.iterrows():
+        data = row['data']
+        valor = row['valor']
+
+        # ⚠️ TRATAMENTO CORRETO DA DESCRIÇÃO
+        descricao = row['descricao']
+        if pd.notna(descricao):
+            descricao = str(descricao).strip()
+        else:
+            descricao = ""
+
+        # Linha principal
+        if pd.notna(data) and str(data).strip() != "":
+            if buffer_descricao:
+                linhas_agrupadas[-1]['descricao'] += " | " + buffer_descricao
+                buffer_descricao = ""
+
+            linhas_agrupadas.append(row.to_dict())
+
+        else:
+            # Linha complementar
+            if descricao:  # só entra se NÃO for vazio
+                if buffer_descricao:
+                    buffer_descricao += " " + descricao
+                else:
+                    buffer_descricao = descricao
+
+    # Final
+    if buffer_descricao and linhas_agrupadas:
+        linhas_agrupadas[-1]['descricao'] += " | " + buffer_descricao
+
+    return pd.DataFrame(linhas_agrupadas)
+
 def ordernar_arquivo(df):
     
     def formatacao_data(data):
