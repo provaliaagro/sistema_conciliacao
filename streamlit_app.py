@@ -1,10 +1,14 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-import funcoes_especificas as func
-import conciliacao as c
+import sistema.conciliacao as c
+import sistema.tratamento_dados as func
+import os
+
 
 # Inicialização do Sistema
+if "API_gemini" not in st.session_state:
+    st.session_state["API_gemini"] = st.secrets.get("API_gemini", "")
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "nome" not in st.session_state:
@@ -12,15 +16,14 @@ if "nome" not in st.session_state:
 
 # Função de autenticação
 def try_login(username, pw):
-    # Exemplo simples: checar contra st.secrets["users"]   
-    users = st.secrets["users"]
+    users = st.secrets.get("users", {})
     if username in users:
         nome_completo, senha_cadastrada = users[username]
         if senha_cadastrada == pw:
             st.session_state.authenticated = True
             st.session_state.nome = nome_completo
-    else:
-        st.error("Usuário ou senha incorretos.")
+            return
+    st.error("Usuário ou senha incorretos.")
 
 # Login
 if not st.session_state.authenticated:
@@ -41,7 +44,6 @@ st.session_state.excel = None
 
 # Tela Inicial
 st.title("Sistema CBA | Provalia")
-st.success(f"Bem-vindo(a), {st.session_state.nome}!")
 st.markdown("### Saldos Relacionados à conciliação:") 
 
 # ENTRADA DO SALDO
@@ -58,12 +60,12 @@ if st.session_state.df_extrato is None:
     st.session_state.tipo_extrato = st.radio(
             "Selecione o banco emissor do extrato:",
             ["SICOOB", "Banco do Brasil", "Extrato Padrão"]
-        )
+        )      
     
     # EXTRATO SICOOB
     if st.session_state.tipo_extrato == "SICOOB":
         # Upload do arquivo
-        extrato = st.file_uploader("Extrato extraído do banco SICOOB no formato Excel", type="xlsx")
+        extrato = st.file_uploader("Extrato extraído do SICOOB no formato Excel", type="xlsx")
         
         if extrato is not None:
             try:
@@ -74,17 +76,16 @@ if st.session_state.df_extrato is None:
                 df_extrato.columns = indices_extrato
                 df_extrato = func.agrupar_linhas_extrato(df_extrato)
                 df_extrato = func.ordernar_arquivo(df_extrato)
-                df_extrato = df_extrato.astype(object)
                 st.session_state['df_extrato'] = df_extrato # Salvando a primeira versão no sistema
 
                 # Tratamento dos dados
                 if "valor" in df_extrato.columns:
                     df_extrato = func.remover_linhas_vazias(df_extrato)
                     df_extrato = func.remover_linhas_desnecessarias(df_extrato)
-                    df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)
+                    df_extrato["valor_convertido"] = df_extrato["valor"].apply(func.converter_valor_extrato)             
                     df_extrato['valor_convertido'] = pd.to_numeric(df_extrato['valor_convertido'], errors='coerce')
                     
-                    # Validação da Conversão dos valores
+                    # Validação da Conversão de Valores
                     valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
                     if not valores_invalidos.empty:
                         df_extrato = df_extrato.dropna(subset=['valor_convertido'])
@@ -113,7 +114,7 @@ if st.session_state.df_extrato is None:
                 df_extrato["Lançamento"] = df_extrato["Lançamento"].fillna('--') + " | " + df_extrato["Detalhes"].fillna('--')
                 df_extrato = df_extrato[["Data", "N° documento", "Lançamento", "Valor"]]
                 df_extrato.columns = indices_extrato
-                #df_extrato = func.ordernar_arquivo(df_extrato)
+                df_extrato = func.ordernar_arquivo(df_extrato)
                 st.session_state['df_extrato'] = df_extrato # Salvando a primeira versão no sistema
                 
                 # Tratamento dos dados
@@ -127,7 +128,7 @@ if st.session_state.df_extrato is None:
                     else:
                         df_extrato["valor_convertido"] = df_extrato["valor"].astype(str).str.replace(".", "", regex=False).str.replace(",", ".", regex=False)
                         df_extrato["valor_convertido"] = pd.to_numeric(df_extrato["valor_convertido"],errors="coerce")
-                    
+                        
                     # Salvando o extrato no sistema
                     st.session_state['df_extrato'] = df_extrato
                     
@@ -137,8 +138,8 @@ if st.session_state.df_extrato is None:
                         
             except Exception as e:
                 st.error(f"Erro ao processar arquivo: {e}")
-    
-    # EXTRATO PADRÃO
+                
+    # EXTRATO PADRÃO                
     elif st.session_state.tipo_extrato == "Extrato Padrão":
         # Upload do arquivo
         extrato = st.file_uploader("Extrato no formato Excel padrão", type="xlsx")
@@ -166,6 +167,7 @@ if st.session_state.df_extrato is None:
                     valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
                     if not valores_invalidos.empty:
                         df_extrato = df_extrato.dropna(subset=['valor_convertido']) 
+                    
                     
                     # Salvando o extrato no sistema
                     st.session_state['df_extrato'] = df_extrato
@@ -202,12 +204,12 @@ if st.session_state.df_extrato is None:
                     df_controle.columns = indices_controle
                     st.session_state['df_controle'] = df_controle # Salvando a primeira versão no sistema
                     
-                    # Tratamento dos dados
+                    #Tratamento dos dados
                     df_controle = func.remover_linhas_vazias(df_controle)
                     df_controle = func.remover_linhas_desnecessarias(df_controle, 'descricao')
                     df_controle["valor_convertido"] = df_controle["valor"].apply(func.converter_valor_reais)
                     
-                    # Validação da Conversão dos valores
+                    # Validação da Conversão de Valores
                     valores_invalidos = df_controle[df_controle['valor_convertido'].isna()]
                     if not valores_invalidos.empty:
                         df_controle = df_controle.dropna(subset=['valor_convertido'])
@@ -223,7 +225,7 @@ if st.session_state.df_extrato is None:
         elif st.session_state.tipo_controle == "Controle Financeiro Padrão":
             # Upload do arquivo
             controle_financeiro = st.file_uploader("Controle Financeiro no formato Excel Padrão", type="xlsx")
-
+            
             if controle_financeiro is not None:
                 try: 
                     # Índices e organização inicial
@@ -232,37 +234,39 @@ if st.session_state.df_extrato is None:
                     st.session_state['df_controle'] = df_controle
                     df_controle = df_controle[["Data", "Descrição", "Contraparte", "Plano de Contas", "Valor"]]
                     df_controle.columns = indices_controle
-                    st.session_state['df_controle'] = df_controle # Salvando a primeira versão no sistema
+                    st.session_state['df_controle'] =df_controle # Salvando a primeira versão no sistema
                     
-                    # Tratamento dos dados
+                    # Tratamento de dados
                     df_controle = func.remover_linhas_vazias(df_controle)
                     df_controle["valor_convertido"] = df_controle["valor"]
-                    
+
                     # Salvando o controle financeiro no sistema
                     st.session_state['df_controle'] = df_controle
                     
                 except Exception as e:
                     st.error(f"Erro ao processar arquivo: {e}")
                     st.stop()
-                    
-# PROCESSO DE CONCILIAÇÃO                                                            
+        
+# PROCESSO DE CONCILIAÇÃO        
 if st.session_state.df_controle is not None:
+    # Campo de Seleção do Formato de Conciliação
+    st.session_state.utilizar_agrupamento = st.checkbox("Utilizar Conciliação com Agrupamento", value=True) 
     if st.button("Processar Conciliação"):
         barra_progresso = st.progress(0)
-        barra_progresso.progress(20)
         
         # CHAMADA DA FUNÇÃO
-        excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial)
-        
-        barra_progresso.progress(50)
+        excel_bytes = None
+        if st.session_state.utilizar_agrupamento:
+            excel_bytes = c.conciliacao_agrupamento(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, barra_progresso)
+        else:
+            excel_bytes = c.conciliacao_simples(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, barra_progresso)
         
         # SALVANDO O RESULTADO DA CONCILIAÇÃO NO SISTEMA
         st.session_state.excel = excel_bytes
         
-        barra_progresso.progress(70)
+        barra_progresso.progress(90)
 
-
-# BOTÃO DE DOWNLOAD DO RELATÓRIO        
+# DOWNLOAD DO RELATÓRIO        
 if st.session_state.excel is not None:
     barra_progresso.progress(100)
     st.download_button(
@@ -271,3 +275,5 @@ if st.session_state.excel is not None:
         file_name=f"relatorio_conciliação_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
+            
+      

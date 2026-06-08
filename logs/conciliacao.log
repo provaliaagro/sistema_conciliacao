@@ -1,0 +1,248 @@
+2026-06-08 09:58:22,466 INFO sistema.conciliacao: Adicionando 2 linhas de controle sem match ao resultado (ids: [1, 9])
+2026-06-08 09:58:22,496 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=46, cf_nc=2, max_itens=15
+2026-06-08 09:58:22,508 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-200.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,512 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-400.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,515 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-442.03, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,518 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-508.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,521 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-600.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,525 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-740.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,531 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-954.29, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,536 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1095.56, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:22,539 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1120.00, cont_roles=2, candidatos=2, tempo=0.00s
+2026-06-08 09:58:22,539 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=2, valor_alvo=-1120.00
+2026-06-08 09:58:27,410 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1114.94, itens=1, score=0.748
+2026-06-08 09:58:27,417 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1520.05, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,419 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1882.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,424 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2752.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,429 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2832.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,433 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-3528.35, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,436 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-5533.15, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,436 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-350000.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,436 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-570000.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 09:58:27,445 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 1 agrupamentos gerados em 4.95s
+2026-06-08 10:02:22,824 INFO sistema.conciliacao: Adicionando 2 linhas de controle sem match ao resultado (ids: [1, 9])
+2026-06-08 10:02:22,837 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=46, cf_nc=2, max_itens=15
+2026-06-08 10:02:22,851 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-200.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,858 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-400.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,860 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-442.03, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,863 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-508.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,865 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-600.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,872 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-740.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,876 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-954.29, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,881 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1095.56, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:22,887 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1120.00, cont_roles=2, candidatos=2, tempo=0.00s
+2026-06-08 10:02:22,887 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=2, valor_alvo=-1120.00
+2026-06-08 10:02:26,573 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1114.94, itens=1, score=0.748
+2026-06-08 10:02:26,590 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1520.05, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,599 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1882.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,602 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2752.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,606 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2832.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,609 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-3528.35, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,611 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-5533.15, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,613 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-350000.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,616 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-570000.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:26,616 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 1 agrupamentos gerados em 3.78s
+2026-06-08 10:02:32,411 INFO sistema.conciliacao: Adicionando 2 linhas de controle sem match ao resultado (ids: [1, 9])
+2026-06-08 10:02:32,431 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=46, cf_nc=2, max_itens=15
+2026-06-08 10:02:32,445 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-200.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:32,457 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-400.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:32,467 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-442.03, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:32,470 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-508.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:32,475 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-600.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:32,480 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-740.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:32,485 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-954.29, cont_roles=1, candidatos=0, tempo=0.01s
+2026-06-08 10:02:32,485 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1095.56, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:32,495 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1120.00, cont_roles=2, candidatos=2, tempo=0.00s
+2026-06-08 10:02:32,495 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=2, valor_alvo=-1120.00
+2026-06-08 10:02:35,955 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1114.94, itens=1, score=0.748
+2026-06-08 10:02:35,975 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1520.05, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:35,980 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1882.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:35,992 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2752.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:35,996 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2832.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:35,999 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-3528.35, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:36,003 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-5533.15, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:36,008 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-350000.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:36,012 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-570000.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:02:36,013 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 1 agrupamentos gerados em 3.58s
+2026-06-08 10:06:51,798 INFO sistema.conciliacao: Adicionando 2 linhas de controle sem match ao resultado (ids: [1, 9])
+2026-06-08 10:06:51,830 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=46, cf_nc=2, max_itens=15
+2026-06-08 10:06:51,856 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-200.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,861 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-400.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,865 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-442.03, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,878 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-508.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,890 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-600.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,896 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-740.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,898 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-954.29, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,898 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1095.56, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:06:51,910 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1120.00, cont_roles=2, candidatos=1, tempo=0.00s
+2026-06-08 10:06:51,910 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=1, valor_alvo=-1120.00
+2026-06-08 10:06:55,460 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1220.14, itens=2, score=0.699
+2026-06-08 10:06:55,482 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 1 agrupamentos gerados em 3.65s
+2026-06-08 10:12:40,679 INFO sistema.conciliacao: Adicionando 2 linhas de controle sem match ao resultado (ids: [1, 9])
+2026-06-08 10:12:40,725 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=46, cf_nc=2, max_itens=15
+2026-06-08 10:12:40,741 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-200.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,745 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-400.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,745 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-442.03, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,745 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-508.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,757 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-600.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,760 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-740.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,764 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-954.29, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,766 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1095.56, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,766 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1120.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,776 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1520.05, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,779 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1882.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,779 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2752.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,784 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2832.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,786 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-3528.35, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,790 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-5533.15, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,794 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-350000.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:12:40,796 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-570000.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,816 INFO sistema.conciliacao: Adicionando 2 linhas de controle sem match ao resultado (ids: [1, 9])
+2026-06-08 10:20:30,834 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=46, cf_nc=2, max_itens=15
+2026-06-08 10:20:30,874 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-200.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,876 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-400.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,876 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-442.03, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,889 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-508.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,894 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-600.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,894 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-740.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,899 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-954.29, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,905 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1095.56, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,910 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1120.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,915 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1520.05, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,916 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1882.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,924 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2752.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,924 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2832.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,929 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-3528.35, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,929 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-5533.15, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,936 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-350000.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:20:30,936 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-570000.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:25:19,730 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1114.94, cont_roles=35, candidatos=12502737, tempo=288.71s
+2026-06-08 10:25:19,830 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=12502737, valor_alvo=-1114.94
+2026-06-08 10:45:49,506 INFO sistema.conciliacao: Adicionando 2 linhas de controle sem match ao resultado (ids: [1, 9])
+2026-06-08 10:45:49,540 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=46, cf_nc=2, max_itens=15
+2026-06-08 10:45:49,563 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-200.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,569 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-400.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,576 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-442.03, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,589 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-508.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,589 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-600.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,601 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-740.00, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,606 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-954.29, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,611 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1095.56, cont_roles=1, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,619 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1120.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,623 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1520.05, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,626 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1882.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,629 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2752.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,635 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-2832.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,640 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-3528.35, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,643 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-5533.15, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,645 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-350000.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,653 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-570000.00, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:45:49,670 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1114.94, cont_roles=35, candidatos=100, tempo=0.00s
+2026-06-08 10:45:49,670 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=100, valor_alvo=-1114.94
+2026-06-08 10:45:56,996 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1114.29, itens=2, score=0.735
+2026-06-08 10:45:56,996 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 1 agrupamentos gerados em 7.46s
+2026-06-08 10:47:08,106 INFO sistema.conciliacao: Adicionando 28 linhas de controle sem match ao resultado (ids: [5, 7, 22, 24, 30, 31, 39, 45, 47, 48, 52, 62, 64, 65, 66, 67, 68, 71, 72, 73, 76, 78, 79, 82, 88, 90, 92, 94])
+2026-06-08 10:47:08,121 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=13, cf_nc=28, max_itens=15
+2026-06-08 10:47:08,133 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=458978.25, cont_roles=8, candidatos=1, tempo=0.00s
+2026-06-08 10:47:08,133 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=1, valor_alvo=458978.25
+2026-06-08 10:47:09,976 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=458978.25, itens=3, score=0.720
+2026-06-08 10:47:10,048 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1500.80, cont_roles=14, candidatos=100, tempo=0.00s
+2026-06-08 10:47:10,048 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=100, valor_alvo=-1500.80
+2026-06-08 10:47:16,491 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1499.31, itens=4, score=0.705
+2026-06-08 10:47:16,534 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-10000.00, cont_roles=12, candidatos=0, tempo=0.01s
+2026-06-08 10:47:16,543 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-15000.00, cont_roles=12, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,559 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-51802.46, cont_roles=14, candidatos=0, tempo=0.01s
+2026-06-08 10:47:16,596 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-650000.00, cont_roles=15, candidatos=0, tempo=0.03s
+2026-06-08 10:47:16,606 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=519378.38, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,611 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=340916.56, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,616 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=271535.30, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,616 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=241489.50, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,616 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=192545.71, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,626 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=88269.56, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,656 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-35846.33, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,661 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-42736.10, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,666 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-121080.00, cont_roles=3, candidatos=0, tempo=0.00s
+2026-06-08 10:47:16,666 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 2 agrupamentos gerados em 8.55s
+2026-06-08 10:50:57,261 INFO sistema.conciliacao: Adicionando 28 linhas de controle sem match ao resultado (ids: [5, 7, 22, 24, 30, 31, 39, 45, 47, 48, 52, 62, 64, 65, 66, 67, 68, 71, 72, 73, 76, 78, 79, 82, 88, 90, 92, 94])
+2026-06-08 10:50:57,274 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=13, cf_nc=28, max_itens=15
+2026-06-08 10:50:57,286 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=458978.25, cont_roles=8, candidatos=1, tempo=0.00s
+2026-06-08 10:50:57,286 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=1, valor_alvo=458978.25
+2026-06-08 10:50:57,286 DEBUG sistema.conciliacao: selecionar_melhor: idx=0 soma=458978.25 valor_alvo=458978.25 diff=0.00 tol=10.00 qtd=3
+2026-06-08 10:50:57,287 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=0 para scoring
+2026-06-08 10:51:56,365 INFO sistema.conciliacao: Adicionando 28 linhas de controle sem match ao resultado (ids: [5, 7, 22, 24, 30, 31, 39, 45, 47, 48, 52, 62, 64, 65, 66, 67, 68, 71, 72, 73, 76, 78, 79, 82, 88, 90, 92, 94])
+2026-06-08 10:51:56,386 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=13, cf_nc=28, max_itens=15
+2026-06-08 10:51:56,398 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=458978.25, cont_roles=8, candidatos=1, tempo=0.00s
+2026-06-08 10:51:56,399 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=1, valor_alvo=458978.25
+2026-06-08 10:51:56,399 DEBUG sistema.conciliacao: selecionar_melhor: idx=0 soma=458978.25 valor_alvo=458978.25 diff=0.00 tol=10.00 qtd=3
+2026-06-08 10:51:56,399 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=0 para scoring
+2026-06-08 10:51:58,499 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=458978.25, itens=3, score=0.720
+2026-06-08 10:51:58,499 INFO sistema.conciliacao: AGR_L1: alvo=458978.25 soma=458978.25 diff=0.00 tol=10.00 accept=SIM
+2026-06-08 10:51:58,558 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1500.80, cont_roles=14, candidatos=100, tempo=0.00s
+2026-06-08 10:51:58,558 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=100, valor_alvo=-1500.80
+2026-06-08 10:51:58,558 DEBUG sistema.conciliacao: selecionar_melhor: idx=0 soma=-1500.80 valor_alvo=-1500.80 diff=0.00 tol=10.00 qtd=8
+2026-06-08 10:51:58,558 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=0 para scoring
+2026-06-08 10:52:00,978 DEBUG sistema.conciliacao: selecionar_melhor: idx=1 soma=-1500.82 valor_alvo=-1500.80 diff=0.02 tol=10.00 qtd=5
+2026-06-08 10:52:00,979 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=1 para scoring
+2026-06-08 10:52:04,100 DEBUG sistema.conciliacao: selecionar_melhor: idx=2 soma=-1501.12 valor_alvo=-1500.80 diff=0.32 tol=10.00 qtd=6
+2026-06-08 10:52:04,100 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=2 para scoring
+2026-06-08 10:52:06,052 DEBUG sistema.conciliacao: selecionar_melhor: idx=3 soma=-1501.16 valor_alvo=-1500.80 diff=0.36 tol=10.00 qtd=5
+2026-06-08 10:52:06,052 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=3 para scoring
+2026-06-08 10:52:06,052 DEBUG sistema.conciliacao: selecionar_melhor: idx=4 soma=-1501.22 valor_alvo=-1500.80 diff=0.42 tol=10.00 qtd=6
+2026-06-08 10:52:06,052 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=4 para scoring
+2026-06-08 10:52:06,052 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1500.82, itens=5, score=0.690
+2026-06-08 10:52:06,052 INFO sistema.conciliacao: AGR_L1: alvo=-1500.80 soma=-1500.82 diff=0.02 tol=10.00 accept=SIM
+2026-06-08 10:52:06,062 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-10000.00, cont_roles=11, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,066 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-15000.00, cont_roles=11, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,086 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-51802.46, cont_roles=13, candidatos=0, tempo=0.02s
+2026-06-08 10:52:06,110 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-650000.00, cont_roles=14, candidatos=0, tempo=0.02s
+2026-06-08 10:52:06,116 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=519378.38, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,116 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=340916.56, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,131 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=271535.30, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,135 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=241489.50, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,139 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=192545.71, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,145 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=88269.56, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,178 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-35846.33, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,183 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-42736.10, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,194 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-121080.00, cont_roles=3, candidatos=0, tempo=0.00s
+2026-06-08 10:52:06,194 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 2 agrupamentos gerados em 9.81s
+2026-06-08 11:05:12,487 INFO sistema.conciliacao: Adicionando 28 linhas de controle sem match ao resultado (ids: [5, 7, 22, 24, 30, 31, 39, 45, 47, 48, 52, 62, 64, 65, 66, 67, 68, 71, 72, 73, 76, 78, 79, 82, 88, 90, 92, 94])
+2026-06-08 11:05:12,518 INFO sistema.conciliacao: Iniciando comparacao_agrupamentos: ex_nc=13, cf_nc=28, max_itens=15
+2026-06-08 11:05:12,540 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=458978.25, cont_roles=8, candidatos=1, tempo=0.00s
+2026-06-08 11:05:12,541 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=1, valor_alvo=458978.25
+2026-06-08 11:05:12,541 DEBUG sistema.conciliacao: selecionar_melhor: idx=0 soma=458978.25 valor_alvo=458978.25 diff=0.00 tol=10.00 qtd=3
+2026-06-08 11:05:12,544 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=0 para scoring
+2026-06-08 11:05:15,875 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=458978.25, itens=3, score=0.720
+2026-06-08 11:05:15,875 INFO sistema.conciliacao: AGR_L1: alvo=458978.25 soma=458978.25 diff=0.00 tol=10.00 accept=SIM
+2026-06-08 11:05:15,955 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-1500.80, cont_roles=14, candidatos=100, tempo=0.00s
+2026-06-08 11:05:15,955 DEBUG sistema.conciliacao: selecionar_melhor_candidato: candidatos=100, valor_alvo=-1500.80
+2026-06-08 11:05:15,955 DEBUG sistema.conciliacao: selecionar_melhor: idx=0 soma=-1500.80 valor_alvo=-1500.80 diff=0.00 tol=10.00 qtd=8
+2026-06-08 11:05:15,955 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=0 para scoring
+2026-06-08 11:05:18,249 DEBUG sistema.conciliacao: selecionar_melhor: idx=1 soma=-1500.82 valor_alvo=-1500.80 diff=0.02 tol=10.00 qtd=5
+2026-06-08 11:05:18,249 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=1 para scoring
+2026-06-08 11:05:21,097 DEBUG sistema.conciliacao: selecionar_melhor: idx=2 soma=-1501.12 valor_alvo=-1500.80 diff=0.32 tol=10.00 qtd=6
+2026-06-08 11:05:21,098 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=2 para scoring
+2026-06-08 11:05:23,505 DEBUG sistema.conciliacao: selecionar_melhor: idx=3 soma=-1501.16 valor_alvo=-1500.80 diff=0.36 tol=10.00 qtd=5
+2026-06-08 11:05:23,505 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=3 para scoring
+2026-06-08 11:05:23,505 DEBUG sistema.conciliacao: selecionar_melhor: idx=4 soma=-1501.22 valor_alvo=-1500.80 diff=0.42 tol=10.00 qtd=6
+2026-06-08 11:05:23,506 DEBUG sistema.conciliacao: selecionar_melhor: ACEITO idx=4 para scoring
+2026-06-08 11:05:23,506 INFO sistema.conciliacao: selecionar_melhor_candidato: escolhido soma=-1500.82, itens=5, score=0.690
+2026-06-08 11:05:23,506 INFO sistema.conciliacao: AGR_L1: alvo=-1500.80 soma=-1500.82 diff=0.02 tol=10.00 accept=SIM
+2026-06-08 11:05:23,532 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-10000.00, cont_roles=11, candidatos=0, tempo=0.01s
+2026-06-08 11:05:23,569 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-15000.00, cont_roles=11, candidatos=0, tempo=0.01s
+2026-06-08 11:05:23,692 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-51802.46, cont_roles=13, candidatos=0, tempo=0.08s
+2026-06-08 11:05:23,851 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-650000.00, cont_roles=14, candidatos=0, tempo=0.13s
+2026-06-08 11:05:23,865 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=519378.38, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,871 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=340916.56, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,876 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=271535.30, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,882 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=241489.50, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,891 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=192545.71, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,901 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=88269.56, cont_roles=7, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,941 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-35846.33, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,945 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-42736.10, cont_roles=2, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,955 INFO sistema.conciliacao: gerar_candidatos: valor_alvo=-121080.00, cont_roles=3, candidatos=0, tempo=0.00s
+2026-06-08 11:05:23,956 INFO sistema.conciliacao: comparacao_agrupamentos finalizada: 2 agrupamentos gerados em 11.44s
+2026-06-08 11:52:44,813 INFO sistema.conciliacao: Adicionando 28 linhas de controle sem match ao resultado (ids: [5, 7, 22, 24, 30, 31, 39, 45, 47, 48, 52, 62, 64, 65, 66, 67, 68, 71, 72, 73, 76, 78, 79, 82, 88, 90, 92, 94])
+2026-06-08 11:53:46,359 INFO sistema.conciliacao: Adicionando 34 linhas de controle sem match ao resultado (ids: [0, 10, 11, 29, 30, 31, 32, 33, 35, 36, 41, 42, 43, 52, 57, 65, 66, 67, 76, 78, 79, 83, 97, 98, 99, 107, 112, 115, 117, 118, 119, 120, 123, 125])
+2026-06-08 12:05:03,471 INFO sistema.conciliacao: Adicionando 34 linhas de controle sem match ao resultado (ids: [0, 10, 11, 29, 30, 31, 32, 33, 35, 36, 41, 42, 43, 52, 57, 65, 66, 67, 76, 78, 79, 83, 97, 98, 99, 107, 112, 115, 117, 118, 119, 120, 123, 125])
+2026-06-08 12:06:27,168 INFO sistema.conciliacao: Adicionando 34 linhas de controle sem match ao resultado (ids: [0, 10, 11, 29, 30, 31, 32, 33, 35, 36, 41, 42, 43, 52, 57, 65, 66, 67, 76, 78, 79, 83, 97, 98, 99, 107, 112, 115, 117, 118, 119, 120, 123, 125])
+2026-06-08 12:08:13,083 INFO sistema.conciliacao: Adicionando 34 linhas de controle sem match ao resultado (ids: [0, 10, 11, 29, 30, 31, 32, 33, 35, 36, 41, 42, 43, 52, 57, 65, 66, 67, 76, 78, 79, 83, 97, 98, 99, 107, 112, 115, 117, 118, 119, 120, 123, 125])

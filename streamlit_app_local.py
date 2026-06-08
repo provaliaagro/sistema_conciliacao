@@ -1,10 +1,15 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-import funcoes_especificas as func
-import conciliacao as c
+import sistema.conciliacao as c
+import sistema.tratamento_dados as func
+import os
+from api import API_gemini
+
+
 
 # Inicializando as variáves de estado do extrato e do controle financeiro:
+st.session_state.API_gemini = API_gemini
 st.session_state.df_extrato = None
 st.session_state.df_controle = None
 st.session_state.excel = None
@@ -216,19 +221,22 @@ if st.session_state.df_extrato is None:
         
 # PROCESSO DE CONCILIAÇÃO        
 if st.session_state.df_controle is not None:
+    # Campo de Seleção do Formato de Conciliação
+    st.session_state.utilizar_agrupamento = st.checkbox("Utilizar Conciliação com Agrupamento", value=True) 
     if st.button("Processar Conciliação"):
         barra_progresso = st.progress(0)
-        barra_progresso.progress(20)
         
         # CHAMADA DA FUNÇÃO
-        excel_bytes = c.conciliacao(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial)
-        
-        barra_progresso.progress(50)
+        excel_bytes = None
+        if st.session_state.utilizar_agrupamento:
+            excel_bytes = c.conciliacao_agrupamento(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, barra_progresso)
+        else:
+            excel_bytes = c.conciliacao_simples(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, barra_progresso)
         
         # SALVANDO O RESULTADO DA CONCILIAÇÃO NO SISTEMA
         st.session_state.excel = excel_bytes
         
-        barra_progresso.progress(70)
+        barra_progresso.progress(90)
 
 # DOWNLOAD DO RELATÓRIO        
 if st.session_state.excel is not None:
