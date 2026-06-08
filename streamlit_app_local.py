@@ -229,7 +229,7 @@ if st.session_state.df_controle is not None:
         # CHAMADA DA FUNÇÃO
         excel_bytes = None
         if st.session_state.utilizar_agrupamento:
-            excel_bytes = c.conciliacao_agrupamento(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, barra_progresso)
+            excel_bytes = c.conciliacao_agrupamento(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial)
         else:
             excel_bytes = c.conciliacao_simples(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, barra_progresso)
         
