@@ -254,19 +254,18 @@ def separar_nao_conciliados(df):
     extrato_nc = df[
         (df['status_conciliacao'] == "NÃO CONCILIADO") &
         (df['valor_extrato'].notna())
-    ][['data_extrato', 'documento_extrato', 'descricao_extrato', 'valor_extrato']].copy()
+    ][['_id_extrato', 'data_extrato', 'documento_extrato', 'descricao_extrato', 'valor_extrato']].copy()
 
-    extrato_nc = extrato_nc.reset_index(drop=True)
-    extrato_nc['_id'] = extrato_nc.index
+    extrato_nc = extrato_nc.rename(columns={'_id_extrato': '_id'})
+
 
     # Controle não conciliado → tem valor_controle e não está conciliado
     controle_nc = df[
         (df['status_conciliacao'] == "NÃO CONCILIADO") &
         (df['valor_controle'].notna())
-    ][['data_controle', 'recurso_controle', 'contraparte_controle', 'plano de contas_controle', 'valor_controle']].copy()
-
-    controle_nc = controle_nc.reset_index(drop=True)
-    controle_nc['_id'] = controle_nc.index
+    ][['_id_controle', 'data_controle', 'recurso_controle', 'contraparte_controle', 'plano de contas_controle', 'valor_controle']].copy()
+    
+    controle_nc = controle_nc.rename(columns={'_id_controle': '_id'})
 
     return extrato_nc, controle_nc
 
@@ -412,6 +411,14 @@ def selecionar_melhor_candidato(
     if not candidatos:
         return None
 
+    # Se existe apenas uma combinação possível,
+    # aceita diretamente.
+    if len(candidatos) == 1:
+        return {
+            **candidatos[0],
+            "score": 1.0
+        }
+
     melhor = None
     melhor_score = -1
 
@@ -421,6 +428,7 @@ def selecionar_melhor_candidato(
             cand["ids"]
         )
 
+        # Prefere agrupamentos com menos itens
         score_qtd = max(
             0,
             1 - (qtd_itens - 1) * 0.15
@@ -464,6 +472,7 @@ def selecionar_melhor_candidato(
             )
         )
 
+        # IA usada apenas como desempate
         score_total = (
             score_contexto * 0.80
             +
@@ -478,9 +487,6 @@ def selecionar_melhor_candidato(
                 **cand,
                 "score": score_total
             }
-
-    if melhor_score < 0.60:
-        return None
 
     return melhor
 
@@ -598,6 +604,8 @@ def comparacao_agrupamentos(
             valor_alvo,
             max_itens=max_itens
         )
+        
+        # st.write(f"Valor alvo: {valor_alvo} | Candidatos encontrados: {len(candidatos)}")
 
         melhor = (
             selecionar_melhor_candidato(
@@ -607,6 +615,9 @@ def comparacao_agrupamentos(
                 cf_nc
             )
         )
+        
+        # st.write("Candidato:", candidatos)
+        # st.write("Melhor:", melhor)
 
         if melhor:
 

@@ -689,47 +689,70 @@ def criar_relatorio_conciliação_agrupamento(
             "agrupamento"
         ):
 
-            extrato = grupo[
+            extratos = grupo[
                 grupo["valor_extrato"].notna()
-            ].iloc[0]
+            ]
 
             controles = grupo[
                 grupo["valor_controle"].notna()
             ]
 
-            for i, (_, controle) in enumerate(
-                controles.iterrows()
-            ):
+            qtd_linhas = max(
+                len(extratos),
+                len(controles)
+            )
 
-                if i == 0:
+            for i in range(qtd_linhas):
 
-                    linha = [
-                        id_agr,
-                        extrato.get("data_extrato", ""),
-                        extrato.get("documento_extrato", ""),
-                        extrato.get("descricao_extrato", ""),
-                        float(extrato.get("valor_extrato", 0)),
-                        controle.get("data_controle", ""),
-                        controle.get("recurso_controle", ""),
-                        controle.get("contraparte_controle", ""),
-                        controle.get("plano de contas_controle", ""),
-                        float(controle.get("valor_controle", 0))
-                    ]
+                ex = (
+                    extratos.iloc[i]
+                    if i < len(extratos)
+                    else None
+                )
 
-                else:
+                cf = (
+                    controles.iloc[i]
+                    if i < len(controles)
+                    else None
+                )
 
-                    linha = [
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        controle.get("data_controle", ""),
-                        controle.get("recurso_controle", ""),
-                        controle.get("contraparte_controle", ""),
-                        controle.get("plano de contas_controle", ""),
-                        float(controle.get("valor_controle", 0))
-                    ]
+                linha = [
+
+                    id_agr if i == 0 else "",
+
+                    ex.get("data_extrato", "")
+                    if ex is not None else "",
+
+                    ex.get("documento_extrato", "")
+                    if ex is not None else "",
+
+                    ex.get("descricao_extrato", "")
+                    if ex is not None else "",
+
+                    (
+                        float(ex.get("valor_extrato", 0))
+                        if ex is not None and pd.notna(ex.get("valor_extrato"))
+                        else ""
+                    ),
+
+                    cf.get("data_controle", "")
+                    if cf is not None else "",
+
+                    cf.get("recurso_controle", "")
+                    if cf is not None else "",
+
+                    cf.get("contraparte_controle", "")
+                    if cf is not None else "",
+
+                    cf.get("plano de contas_controle", "")
+                    if cf is not None else "",
+
+                    (
+                        float(cf.get("valor_controle", 0))
+                        if cf is not None and pd.notna(cf.get("valor_controle"))
+                        else ""
+                    )
+                ]
 
                 relatorio_conv.append(linha)
 
