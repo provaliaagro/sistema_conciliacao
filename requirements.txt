@@ -4,4 +4,4 @@ numpy==1.26.4
 python-dateutil==2.9.0.post0
 streamlit==1.37.1
 altair==5.0.1
-google-genai=2.8.0
+google-genai==2.8.0
