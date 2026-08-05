@@ -1,7 +1,7 @@
-pandas
-openpyxl
-numpy
-python-dateutil
-streamlit
-altair~=4.2.0
-google-genai
+pandas==2.2.3
+openpyxl==3.1.5
+numpy==1.26.4
+python-dateutil==2.9.0.post0
+streamlit==1.37.1
+altair==5.0.1
+google-genai=2.8.0
