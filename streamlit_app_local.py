@@ -31,7 +31,7 @@ if st.session_state.df_extrato is None:
     # Campo de Seleção
     st.session_state.tipo_extrato = st.radio(
             "Selecione o banco emissor do extrato:",
-            ["SICOOB", "Banco do Brasil", "Extrato Padrão"]
+            ["SICOOB", "Banco do Brasil", "Extrato Padrão", "SICOOB (novo)"]
         )      
     
     # EXTRATO SICOOB
@@ -150,7 +150,47 @@ if st.session_state.df_extrato is None:
                         
             except Exception as e:
                 st.error(f"Erro ao processar arquivo: {e}")
+                
+    # SICOOB NOVO               
+    elif st.session_state.tipo_extrato == "SICOOB (novo)":
+        # Upload do arquivo
+        extrato = st.file_uploader("Extrato no NOVO formato do SICOOB", type="xlsx")
+            
+        if extrato is not None:
+            try:
+                # Índices e organização inicial
+                indices_extrato = ["data", "documento", "descricao", "valor"]
+                df_extrato = pd.read_excel(extrato, engine="openpyxl", header=1)
+                df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "INFORMAÇÕES COMPLEMENTARES", "VALOR"]]
+                df_extrato["HISTÓRICO"] = df_extrato["HISTÓRICO"].fillna('--') + ' | ' + df_extrato["INFORMAÇÕES COMPLEMENTARES"].fillna('--')
+                df_extrato = df_extrato[["DATA", "DOCUMENTO", "HISTÓRICO", "VALOR"]]
+                df_extrato.columns = indices_extrato
+                df_extrato = func.ordernar_arquivo(df_extrato)
+                st.session_state['df_extrato'] = df_extrato # Salvando a primeira versão no sistema
     
+                # Tratamento dos dados
+                if "valor" in df_extrato.columns:
+                    df_extrato = func.remover_linhas_vazias(df_extrato)
+                    df_extrato = func.remover_linhas_desnecessarias(df_extrato)
+                    df_extrato["valor_convertido"] = df_extrato["valor"]
+                    df_extrato['valor_convertido'] = pd.to_numeric(df_extrato['valor_convertido'], errors='coerce')
+                        
+                    # Validação da Conversão de Valores
+                    valores_invalidos = df_extrato[df_extrato['valor_convertido'].isna()]
+                    if not valores_invalidos.empty:
+                        df_extrato = df_extrato.dropna(subset=['valor_convertido']) 
+                        
+                        
+                    # Salvando o extrato no sistema
+                    st.session_state['df_extrato'] = df_extrato
+                        
+                else:
+                    st.error("Coluna 'valor' não encontrada no arquivo!")
+                    st.stop()
+                            
+            except Exception as e:
+                st.error(f"Erro ao processar arquivo: {e}")
+                    
     # entrada do controle financeiro
     if st.session_state.df_extrato is not None:
         st.markdown("### Selecione o arquivo do Controle Financeiro") 
@@ -231,7 +271,7 @@ if st.session_state.df_controle is not None:
         if st.session_state.utilizar_agrupamento:
             excel_bytes = c.conciliacao_agrupamento(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial)
         else:
-            excel_bytes = c.conciliacao_simples(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial, barra_progresso)
+            excel_bytes = c.conciliacao_simples(st.session_state.df_extrato, st.session_state.df_controle, st.session_state.saldo_inicial)
         
         # SALVANDO O RESULTADO DA CONCILIAÇÃO NO SISTEMA
         st.session_state.excel = excel_bytes

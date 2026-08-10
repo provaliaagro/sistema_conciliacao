@@ -230,7 +230,7 @@ def conciliacao_simples(ex, cf, si):
     # CRIAÇÃO DO RELATÓRIO
     nome_usuario = st.session_state.get('nome', 'Usuário não identificado')
     
-    df_relatorico_conv, df_relatorio_div = r.criar_relatorio_conciliação_simples(
+    df_relatorico_conv, df_relatorio_div, df_relatorio_grf = r.criar_relatorio_conciliação_simples(
         resultado,
         si,
         mov_extrato,
@@ -240,7 +240,7 @@ def conciliacao_simples(ex, cf, si):
         nome_usuario
     )
     
-    excel_bytes = r.exportar_relatorio_excel_simples(df_relatorico_conv, df_relatorio_div)
+    excel_bytes = r.exportar_relatorio_excel_simples(df_relatorico_conv, df_relatorio_div, df_relatorio_grf)
     
     return excel_bytes
 
@@ -785,7 +785,7 @@ def conciliacao_agrupamento(ex, cf, si, barra_progresso=None):
     st.write("Exportando relatório...")
     nome_usuario = st.session_state.get('nome', 'Usuário não identificado')
     
-    df_relatorico_conv, df_relatorio_div = r.criar_relatorio_conciliação_agrupamento(
+    df_relatorico_conv, df_relatorio_div, df_relatorio_grf = r.criar_relatorio_conciliação_agrupamento(
         resultado_final,
         si,
         mov_extrato,
@@ -795,7 +795,7 @@ def conciliacao_agrupamento(ex, cf, si, barra_progresso=None):
         nome_usuario
     )
     
-    excel_bytes = r.exportar_relatorio_excel_agrupamento(df_relatorico_conv, df_relatorio_div)
+    excel_bytes = r.exportar_relatorio_excel_agrupamento(df_relatorico_conv, df_relatorio_div, df_relatorio_grf)
     
     return excel_bytes
     
